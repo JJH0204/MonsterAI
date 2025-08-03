@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI.BehaviorTree
+namespace AI.BehaviorTree.Nodes
 {
     public enum NodeState
     {
