@@ -15,6 +15,7 @@ namespace AI.BehaviorTree.Nodes
     // [CreateAssetMenu(fileName = "New BT Node", menuName = "Behavior Tree/Node")]
     public abstract class BTNode : ScriptableObject
     {
+        // GraphView에서 사용하기 위한 속성들
         [HideInInspector] public NodeState state;
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;

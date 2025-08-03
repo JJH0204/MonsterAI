@@ -2,6 +2,7 @@
 
 namespace AI.BehaviorTree
 {
+    [CreateAssetMenu(menuName = "BehaviorTree/Blackboard")]
     public class Blackboard : ScriptableObject
     {
         public Transform target; // 타겟 오브젝트
