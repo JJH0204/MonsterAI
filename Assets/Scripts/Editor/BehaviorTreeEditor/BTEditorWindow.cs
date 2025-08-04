@@ -1,68 +1,55 @@
-using AI.BehaviorTree;
 using UnityEditor;
+using AI.BehaviorTree;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BTEditorWindow : EditorWindow
+namespace Editor.BehaviorTreeEditor
 {
-    private BTGraphView _graphView;
-    private BehaviorTree _tree;
-
-    [MenuItem("Tools/Behavior Tree Editor")]
-    public static void OpenWindow()
+    public class BTEditorWindow : EditorWindow
     {
-        var window = GetWindow<BTEditorWindow>();
-        window.titleContent = new GUIContent("Behavior Tree Editor");
-    }
+        private BTGraphView _graphView;
+        private BehaviorTree _currentTree;
 
-    private void OnEnable()
-    {
-        ConstructGraphView();
-        GenerateToolbar();
-    }
+        [MenuItem("Window/AI/Behavior Tree Editor")]
+        // public static void ShowWindow()
+        public static void Open()
+        {
+            var window = GetWindow<BTEditorWindow>("Behavior Tree Editor");
+            window.titleContent = new GUIContent("Behavior Tree Graph");
+            window.Show();
+        }
 
-    private void OnDisable()
-    {
-        rootVisualElement.Remove(_graphView);
-    }
-
-    private void ConstructGraphView()
-    {
-        _graphView = new BTGraphView { name = "Behavior Tree Graph" };
-        _graphView.StretchToParentSize();
-        rootVisualElement.Add(_graphView);
-    }
-
-    // private void GenerateToolbar()
-    // {
-    //     var toolbar = new Toolbar();
-    //
-    //     var newTreeButton = new Button(() => _graphView.CreateNewTree()) { text = "New Tree" };
-    //     toolbar.Add(newTreeButton);
-    //
-    //     var addActionNode = new Button(() =>
-    //     {
-    //         var node = new BTNodeView("Action");
-    //         node.SetPosition(new Rect(Vector2.zero, new Vector2(200, 150)));
-    //         _graphView.AddElement(node);
-    //     }) { text = "Add Action Node" };
-    //     toolbar.Add(addActionNode);
-    //
-    //     rootVisualElement.Add(toolbar);
-    // }
-    
-    private void GenerateToolbar()
-    {
-        var toolbar = new Toolbar();
-
-        var loadBtn = new Button(() => _graphView.PopulateView(_tree)) { text = "Load Tree" };
-        toolbar.Add(loadBtn);
-
-        var saveBtn = new Button(() => _graphView.SaveTree()) { text = "Save Tree" };
-        toolbar.Add(saveBtn);
-
-        rootVisualElement.Add(toolbar);
+        // private void OnEnable()
+        // {
+        //     // Selection.selectionChanged += OnSelectionChanged;
+        //     rootVisualElement.Clear();  // 기존 root를 비워 중복 방지
+        //
+        //     var selectedObject = Selection.activeObject;
+        //     
+        //     _graphView = new BTGraphView();
+        //     _graphView.StretchToParentSize();
+        //     rootVisualElement.Add(_graphView);
+        //     
+        //     if (selectedObject != null)
+        //     {
+        //         // TODO: 노드 연결 정보 불러오기
+        //         // LoadGraphFromObject();
+        //     }
+        //     else
+        //     {
+        //         CreateDefaultGraph();
+        //     }
+        // }
+        
+        // 빈 그래프 생성 및 기본 루트 노드 생성
+        private void CreateDefaultGraph()
+        {
+            var temp = BTEditorUtils.CreateRootNode(_currentTree, "Root");
+            var node = new BTNodeView(temp);
+            node.SetPosition(new Rect(100, 200, 200, 150));
+            _graphView.AddElement(node);
+        }
     }
 }

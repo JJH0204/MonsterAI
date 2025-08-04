@@ -20,9 +20,12 @@ public class BTNodeView : Node
         style.left = node.position.x;
         style.top = node.position.y;
 
-        inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
-        inputPort.portName = "In";
-        inputContainer.Add(inputPort);
+        if (title != "Root")
+        {
+            inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            inputPort.portName = "In";
+            inputContainer.Add(inputPort);
+        }
 
         outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(bool));
         outputPort.portName = "Out";

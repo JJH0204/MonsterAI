@@ -25,6 +25,27 @@ public static class BTEditorUtils
         return Color.gray;
     }
     
+    public static BTRoot CreateRootNode(BehaviorTree tree, string name = null)
+    {
+        var node = ScriptableObject.CreateInstance<BTRoot>();
+        
+        if (node == null)
+        {
+            Debug.LogError($"[CreateNode] Failed to create ScriptableObject of type {typeof(BTRoot)}. Make sure it is a non-abstract ScriptableObject.");
+            return null;
+        }
+        
+        node.name = name ?? typeof(BTRoot).Name;
+        node.guid = System.Guid.NewGuid().ToString();
+        node.position = Vector2.zero;
+
+        // 트리의 에셋 내부에 서브 에셋으로 등록
+        // AssetDatabase.AddObjectToAsset(node, tree);      // TODO: Fix null Error
+        // AssetDatabase.SaveAssets();
+
+        return node;
+    }
+    
     public static T CreateNode<T>(BehaviorTree tree, string name = null) where T : BTNode
     {
         var node = ScriptableObject.CreateInstance<T>();

@@ -9,94 +9,112 @@ using UnityEditor;
 
 public class BTGraphView : GraphView
 {
-    private BehaviorTree tree;
+    private BehaviorTree _tree;
+
+    #region 생성자
+
+    // 그래프 뷰 생성자
     public BTGraphView()
     {
-        var styleSheet = Resources.Load<StyleSheet>("BTStyles");
+        var styleSheet = Resources.Load<StyleSheet>("BTStyles");    // uss 파일을 /Assets/Resources 아래에서 찾는다.
+        
         if (styleSheet != null)
-            styleSheets.Add(styleSheet);
+            styleSheets.Add(styleSheet);    // 스타일 적용
         else
             Debug.LogWarning("BTStyles stylesheet not found. Please ensure it exists in the Resources folder.");
-        // styleSheets.Add();
+        
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
-
+        
+        // 배경 그리드 설정
         GridBackground grid = new();
         Insert(0, grid);
         grid.StretchToParentSize();
-
-        AddElement(GenerateEntryPointNode());
+        
+        // Root Node 생성
+        // AddElement(GenerateEntryPointNode());
     }
 
-    private BTNodeView GenerateEntryPointNode()
-    {
-        var node = new BTNodeView(BTEditorUtils.CreateNode<BTNode>(tree, "Root Node"));
-        node.SetPosition(new Rect(100, 200, 200, 150));
-        AddElement(node);
-        return node;
-    }
+    #endregion
 
-    public void CreateNewTree()
-    {
-        DeleteElements(graphElements);
-        AddElement(GenerateEntryPointNode());
-    }
-    public void PopulateView(BehaviorTree tree)
-    {
-        this.tree = tree;
+    // private BTNodeView GenerateEntryPointNode()
+    // {
+    //     var temp = BTEditorUtils.CreateRootNode(_tree, "Root");
+    //     var node = new BTNodeView(temp);
+    //     node.SetPosition(new Rect(100, 200, 200, 150));
+    //     AddElement(node);
+    //     return node;
+    // }
 
-        // 1. 기존 노드 제거
-        graphElements.ToList().ForEach(RemoveElement);
+    // public void CreateNewTree()
+    // {
+    //     DeleteElements(graphElements);
+    //     AddElement(GenerateEntryPointNode());
+    // }
+    
+    // public void PopulateView(BehaviorTree tree)
+    // {
+    //     this._tree = tree;
+    //
+    //     // 1. 기존 노드 제거
+    //     graphElements.ToList().ForEach(RemoveElement);
+    //
+    //     // 2. 트리 노드 순회하며 GraphView 노드 생성
+    //     if (tree.rootNode == null)
+    //         tree.rootNode = BTEditorUtils.CreateNode<BTRoot>(tree);
+    //
+    //     CreateNodeView(tree.rootNode);
+    //     tree.rootNode.OnValidateNode();
+    //
+    //     foreach (var node in tree.GetAllNodes())
+    //         CreateNodeView(node);
+    //
+    //     // 3. 연결 정보 복원
+    //     foreach (var node in tree.GetAllNodes())
+    //     {
+    //         var children = BTEditorUtils.GetChildren(node);
+    //         foreach (var child in children)
+    //             AddEdge(FindNodeView(node), FindNodeView(child));
+    //     }
+    // }
 
-        // 2. 트리 노드 순회하며 GraphView 노드 생성
-        if (tree.rootNode == null)
-            tree.rootNode = BTEditorUtils.CreateNode<BTRoot>(tree);
+    // public void SaveTree()
+    // {
+    //     // Editor에서 노드 위치, GUID 업데이트
+    //     foreach (var nodeView in nodes.ToList().Cast<BTNodeView>())
+    //     {
+    //         nodeView.node.position = nodeView.GetPosition().position;
+    //         EditorUtility.SetDirty(nodeView.node);
+    //     }
+    //
+    //     EditorUtility.SetDirty(_tree);
+    //     AssetDatabase.SaveAssets();
+    // }
 
-        CreateNodeView(tree.rootNode);
-        tree.rootNode.OnValidateNode();
-
-        foreach (var node in tree.GetAllNodes())
-            CreateNodeView(node);
-
-        // 3. 연결 정보 복원
-        foreach (var node in tree.GetAllNodes())
-        {
-            var children = BTEditorUtils.GetChildren(node);
-            foreach (var child in children)
-                AddEdge(FindNodeView(node), FindNodeView(child));
-        }
-    }
-
-    public void SaveTree()
-    {
-        // Editor에서 노드 위치, GUID 업데이트
-        foreach (var nodeView in nodes.ToList().Cast<BTNodeView>())
-        {
-            nodeView.node.position = nodeView.GetPosition().position;
-            EditorUtility.SetDirty(nodeView.node);
-        }
-
-        EditorUtility.SetDirty(tree);
-        AssetDatabase.SaveAssets();
-    }
-
-    private BTNodeView CreateNodeView(BTNode node)
+    public BTNodeView CreateNodeView(BTNode node)
     {
         var view = new BTNodeView(node);
         AddElement(view);
         return view;
     }
 
-    private BTNodeView FindNodeView(BTNode node)
+    // private BTNodeView FindNodeView(BTNode node)
+    // {
+    //     return GetNodeByGuid(node.guid) as BTNodeView;
+    // }
+    //
+    // private void AddEdge(BTNodeView parentView, BTNodeView childView)
+    // {
+    //     var edge = parentView.outputPort.ConnectTo(childView.inputPort);
+    //     AddElement(edge);
+    // }
+    
+    public void LoadFromBehaviorTree(BehaviorTree tree)
     {
-        return GetNodeByGuid(node.guid) as BTNodeView;
-    }
+        _tree = tree;
 
-    private void AddEdge(BTNodeView parentView, BTNodeView childView)
-    {
-        var edge = parentView.outputPort.ConnectTo(childView.inputPort);
-        AddElement(edge);
+        // TODO: 트리를 순회하면서 에디터 뷰에 노드 생성
     }
 }
