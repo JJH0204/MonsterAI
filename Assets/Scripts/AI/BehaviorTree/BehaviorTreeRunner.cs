@@ -20,5 +20,8 @@ namespace AI.BehaviorTree
         
         private void Start() => tree?.Init(monsterStats);
         private void Update() => tree?.Tick();
+        
+        public BehaviorTree Tree => tree;
+        public MonsterStats MonsterStats => monsterStats;
     }
 }

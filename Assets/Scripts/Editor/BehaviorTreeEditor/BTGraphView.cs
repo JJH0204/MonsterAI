@@ -11,6 +11,9 @@ public class BTGraphView : GraphView
 {
     private BehaviorTree _tree;
 
+    public BTNode outputPort;
+    public Node inputPort;
+
     #region 생성자
 
     // 그래프 뷰 생성자
@@ -54,31 +57,20 @@ public class BTGraphView : GraphView
     //     AddElement(GenerateEntryPointNode());
     // }
     
-    // public void PopulateView(BehaviorTree tree)
-    // {
-    //     this._tree = tree;
-    //
-    //     // 1. 기존 노드 제거
-    //     graphElements.ToList().ForEach(RemoveElement);
-    //
-    //     // 2. 트리 노드 순회하며 GraphView 노드 생성
-    //     if (tree.rootNode == null)
-    //         tree.rootNode = BTEditorUtils.CreateNode<BTRoot>(tree);
-    //
-    //     CreateNodeView(tree.rootNode);
-    //     tree.rootNode.OnValidateNode();
-    //
-    //     foreach (var node in tree.GetAllNodes())
-    //         CreateNodeView(node);
-    //
-    //     // 3. 연결 정보 복원
-    //     foreach (var node in tree.GetAllNodes())
-    //     {
-    //         var children = BTEditorUtils.GetChildren(node);
-    //         foreach (var child in children)
-    //             AddEdge(FindNodeView(node), FindNodeView(child));
-    //     }
-    // }
+    public void PopulateView(BehaviorTree tree)
+    {
+        _tree = tree;
+        DeleteElements(graphElements); // 기존 노드 제거
+        if (_tree.rootNode == null)
+            _tree.rootNode = BTEditorUtils.CreateNode<BTRoot>(_tree, "Root");
+        CreateNodeView(_tree.rootNode);
+        _tree.rootNode.OnValidateNode();
+        foreach (var node in _tree.GetAllNodes())
+        {
+            var nodeView = CreateNodeView(node);
+            nodeView.SetPosition(new Rect(node.position.x, node.position.y, 200, 150));
+        }
+    }
 
     // public void SaveTree()
     // {
@@ -111,10 +103,10 @@ public class BTGraphView : GraphView
     //     AddElement(edge);
     // }
     
-    public void LoadFromBehaviorTree(BehaviorTree tree)
-    {
-        _tree = tree;
-
-        // TODO: 트리를 순회하면서 에디터 뷰에 노드 생성
-    }
+    // public void LoadFromBehaviorTree(BehaviorTree tree)
+    // {
+    //     _tree = tree;
+    //
+    //     // TODO: 트리를 순회하면서 에디터 뷰에 노드 생성
+    // }
 }

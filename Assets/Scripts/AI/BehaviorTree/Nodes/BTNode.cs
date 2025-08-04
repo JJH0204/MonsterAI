@@ -19,6 +19,9 @@ namespace AI.BehaviorTree.Nodes
         [HideInInspector] public NodeState state;
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;
+        [HideInInspector] public new string name;
+        [HideInInspector] public List<BTNode> input = new List<BTNode>();
+        [HideInInspector] public List<BTNode> outputs = new List<BTNode>();
 
         public BTNode parent;
         public abstract NodeState Evaluate(Blackboard blackboard);
