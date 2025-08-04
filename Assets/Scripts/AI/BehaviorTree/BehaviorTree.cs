@@ -10,8 +10,12 @@ namespace AI.BehaviorTree
         public BTNode rootNode;
         public Blackboard blackboard;
 
-        public void Init()
+        public void Init(MonsterStats monsterStats)
         {
+            blackboard.target = monsterStats.target;
+            blackboard.navMeshAgent = monsterStats.navMeshAgent;
+            blackboard.body = monsterStats.body;
+            
             rootNode?.OnValidateNode();
         }
 
