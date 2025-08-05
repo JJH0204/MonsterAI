@@ -67,9 +67,10 @@ public static class BTEditorUtils
         return node;
     }
 
+    // input Node == Parent Node
     public static BTComposite GetParent(BTNode node)
     {
-        return node.parent as BTComposite;
+        return node.input as BTComposite;
     }
 
     public static List<BTNode> GetChildren(BTNode node)

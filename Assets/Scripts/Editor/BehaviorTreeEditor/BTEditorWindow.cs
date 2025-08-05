@@ -79,23 +79,23 @@ namespace Editor.BehaviorTreeEditor
         // 선택된 오브젝트에서 그래프를 불러오기
         private void LoadGraphFromObject()
         {
-            var selectedObject = Selection.activeObject;
+            var selectedObject = Selection.activeObject;        // 에디터에서 선택한 객체 정보를 가져온다.
             
-            if (selectedObject is not BehaviorTree tree)
+            if (selectedObject is not BehaviorTree tree)        // 선택한 객체가 BT가 아니면 
             {
                 Debug.LogWarning("Selected object is not a BehaviorTree. Please select a valid BehaviorTree asset.");
                 return;
             }
             
             // var tree = treeRunner.Tree;
-            if (tree == null)
+            if (tree == null)                               // 선택한 BT가 비어있으면
             {
                 Debug.LogWarning("Selected BehaviorTreeRunner does not have a valid BehaviorTree assigned.");
                 return;
             }
             
             _currentTree = tree;
-            _graphView.PopulateView(tree); // 그래프 뷰에 트리 데이터 채우기
+            // _graphView.PopulateView(tree);                  // 그래프 뷰에 트리 데이터 채우기
         
             // 선택된 트리의 노드들을 그래프 뷰에 추가
             var nodes = tree.GetAllNodes();
@@ -120,46 +120,29 @@ namespace Editor.BehaviorTreeEditor
                 // 입력 포트 연결
                 if (node.input != null)
                 {
-                    foreach (var inputEdge in node.input)
-                    {
-                        // 입력 포트가 있는 경우 연결
-                        var inputPort = nodeView.inputPort;
-                        if (inputPort == null) continue;
-                        var outputPort = _graphView.GetNodeByGuid(inputEdge.guid)?.outputPort;
-
-                        if (outputPort == null) continue;
-                        var edge = new Edge
-                        {
-                            output = outputPort,
-                            input = inputPort
-                        };
-                        
-                        edge.output.Connect(edge);
-                        edge.input.Connect(edge);
-                        _graphView.AddElement(edge);
-                    }
+                    
                 }
                 
                 // 출력 포트 연결
-                if (node.outputs.Count > 0)
+                if (node.outputs != null)
                 {
                     foreach (var outputEdge in node.outputs)
                     {
                         // 출력 포트가 있는 경우 연결
-                        var outputPort = nodeView.outputPort;
-                        if (outputPort == null) continue;
-                        var inputPort = _graphView.GetNodeByGuid(outputEdge.guid)?.inputPort;
-                        
-                        if (inputPort == null) continue;
-                        var edge = new Edge
-                        {
-                            output = outputPort,
-                            input = inputPort
-                        };
-                        
-                        edge.output.Connect(edge);
-                        edge.input.Connect(edge);
-                        _graphView.AddElement(edge);
+                        // var outputPort = nodeView.outputPort;
+                        // if (outputPort == null) continue;
+                        // var inputPort = _graphView.GetNodeByGuid(outputEdge.guid)?.inputPort;
+                        //
+                        // if (inputPort == null) continue;
+                        // var edge = new Edge
+                        // {
+                        //     output = outputPort,
+                        //     input = inputPort
+                        // };
+                        //
+                        // edge.output.Connect(edge);
+                        // edge.input.Connect(edge);
+                        // _graphView.AddElement(edge);
                     }
                 }
             }

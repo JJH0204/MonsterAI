@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace  AI.BehaviorTree.Nodes
 {
+    // 여러 자식 노드를 가질 수 있는 노드의 모체
     public class BTComposite : BTNode
     {
         [SerializeField] public List<BTNode> children = new();
@@ -11,7 +12,7 @@ namespace  AI.BehaviorTree.Nodes
         public override void OnValidateNode()
         {
             foreach (var child in children)
-                child.parent = this;
+                child.input = this;
         }
         
         // 이 클래스는 행동 노드의 기본 구현을 제공한다.

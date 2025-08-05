@@ -2,20 +2,22 @@
 
 namespace AI.BehaviorTree.Nodes
 {
-    [CreateAssetMenu(menuName = "BehaviorTree/Selector")]
+    [CreateAssetMenu(menuName = "BehaviorTree/Composite/Sequence")]
     // 모든 자식 노드를 순차적으로 실행하고,
-    // 첫 번째 성공 노드가 발견되면 성공 상태를 반환합니다.
-    // 모든 자식 노드가 실패하면 실패 상태를 반환합니다.
-    public class BTSelector : BTComposite
+    // 모든 자식 노드가 성공하면 성공 상태를 반환한다.
+    // 하나라도 실패하면 실패 상태를 반환한다.
+    // 만약 자식 노드 중 하나가 실행 중인 상태라면, 그 상태를 유지한다.
+    // 이 노드는 일반적으로 여러 행동을 순차적으로 실행할 때 사용한다.
+    public class BTSequence: BTComposite
     {
         public override NodeState Evaluate(Blackboard blackboard)
         {
             foreach (var child in children)
             {
                 var childState = child.Evaluate(blackboard);
-                if (childState == NodeState.Success)
+                if (childState == NodeState.Failure)
                 {
-                    state = NodeState.Success;
+                    state = NodeState.Failure;
                     return state;
                 }
                 if (childState == NodeState.Running)
@@ -24,7 +26,7 @@ namespace AI.BehaviorTree.Nodes
                     return state;
                 }
             }
-            state = NodeState.Failure;
+            state = NodeState.Success;
             return state;
         }
     }
