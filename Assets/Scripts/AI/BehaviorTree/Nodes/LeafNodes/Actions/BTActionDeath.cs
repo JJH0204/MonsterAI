@@ -2,12 +2,13 @@ using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
 {
-    public class BTIdleAction : BTAction
+    public class BTActionDeath : BTNode
     {
         public override NodeState Evaluate(Blackboard blackboard)
         {
-            state = NodeState.Failure;
-            return state;
+            
+            
+            return state = NodeState.Success;
         }
     }
 }

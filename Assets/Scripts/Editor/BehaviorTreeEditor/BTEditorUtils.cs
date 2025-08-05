@@ -25,17 +25,17 @@ public static class BTEditorUtils
         return Color.gray;
     }
     
-    public static BTRoot CreateRootNode(BehaviorTree tree, string name = null)
+    public static BTNode CreateRootNode(BehaviorTree tree, string name = null)
     {
-        var node = ScriptableObject.CreateInstance<BTRoot>();
+        var node = ScriptableObject.CreateInstance<BTNode>();
         
         if (node == null)
         {
-            Debug.LogError($"[CreateNode] Failed to create ScriptableObject of type {typeof(BTRoot)}. Make sure it is a non-abstract ScriptableObject.");
+            Debug.LogError($"[CreateNode] Failed to create ScriptableObject of type {typeof(BTNode)}. Make sure it is a non-abstract ScriptableObject.");
             return null;
         }
         
-        node.name = name ?? typeof(BTRoot).Name;
+        node.name = name ?? typeof(BTNode).Name;
         node.guid = System.Guid.NewGuid().ToString();
         node.position = Vector2.zero;
 

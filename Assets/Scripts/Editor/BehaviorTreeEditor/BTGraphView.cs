@@ -62,7 +62,7 @@ public class BTGraphView : GraphView
         _tree = tree;
         DeleteElements(graphElements); // 기존 노드 제거
         if (_tree.rootNode == null)
-            _tree.rootNode = BTEditorUtils.CreateNode<BTRoot>(_tree, "Root");
+            _tree.rootNode = BTEditorUtils.CreateNode<BTNode>(_tree, "Root");
         CreateNodeView(_tree.rootNode);
         _tree.rootNode.OnValidateNode();
         foreach (var node in _tree.GetAllNodes())

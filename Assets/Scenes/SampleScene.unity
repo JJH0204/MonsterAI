@@ -469,7 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e596d8cb3be1748b90d7d7ae18652a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: d4270bed031d7cb4fa84a447c0fda616, type: 2}
+  tree: {fileID: 11400000, guid: 7cf8684639e1dfe409cd72a4c6909029, type: 2}
   monsterStats:
     navMeshAgent: {fileID: 736042794}
     body: {fileID: 736042792}

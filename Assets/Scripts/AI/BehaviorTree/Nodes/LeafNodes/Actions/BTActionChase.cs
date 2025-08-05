@@ -3,7 +3,7 @@
 namespace AI.BehaviorTree.Nodes
 {
     [CreateAssetMenu(menuName = "BehaviorTree/Actions/Chase")]
-    public class BTChaseAction : BTAction
+    public class BTActionChase : BTAction
     {
         public override NodeState Evaluate(Blackboard blackboard)
         {

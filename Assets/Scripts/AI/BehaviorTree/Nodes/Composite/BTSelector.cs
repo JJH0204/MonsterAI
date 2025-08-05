@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
 {
@@ -8,6 +9,14 @@ namespace AI.BehaviorTree.Nodes
     // 모든 자식 노드가 실패하면 실패 상태를 반환합니다.
     public class BTSelector : BTComposite
     {
+        // public BTSelector(NodeState state, string name, string guid, Vector2 position, List<BTNode> children)
+        // {
+        //     this.state = state;
+        //     this.name = name;
+        //     this.guid = guid.ToString();
+        //     this.position = position;
+        //     this.children = children ?? new List<BTNode>();
+        // }
         public override NodeState Evaluate(Blackboard blackboard)
         {
             foreach (var child in children)

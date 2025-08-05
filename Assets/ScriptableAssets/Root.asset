@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26259176c8274541a9fc42f97a817be8, type: 3}
+  m_Script: {fileID: 11500000, guid: 976b6677885a41739ad8b6b8804fc302, type: 3}
   m_Name: Root
   m_EditorClassIdentifier: 
   state: 0
   name: Root
   guid: 
-  position: {x: 0, y: 0}
+  position: {x: 463, y: -36.08}
   input: {fileID: 0}
   outputs: []
-  children: []
+  children:
+  - {fileID: 11400000, guid: 0dcfa617c8dc07846a7d0695ec817a85, type: 2}
