@@ -6,9 +6,9 @@ namespace AI.BehaviorTree.Nodes
     [CreateAssetMenu(menuName = "BehaviorTree/Decorator/Inverter")]
     public class BTInverter : BTDecorator
     {
-        public override NodeState Evaluate(Blackboard blackboard)
+        public override NodeState Evaluate(MonsterStats monsterStats)
         {
-            var nodeState = child.Evaluate(blackboard);
+            var nodeState = child.Evaluate(monsterStats);
             
             if (nodeState == NodeState.Failure)
                 state = NodeState.Success;

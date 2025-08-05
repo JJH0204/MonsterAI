@@ -9,14 +9,14 @@ namespace AI.BehaviorTree.Nodes
 
         private float _lastExecuted;
         
-        public override NodeState Evaluate(Blackboard blackboard)
+        public override NodeState Evaluate(MonsterStats monsterStats)
         {
             // 쿨타입과 시간 경과를 비교해서 쿨타임 중인 경우 자식 실행 x
             if (Time.time - _lastExecuted < cooldownTime)
                 return state = NodeState.Failure;
             
             // 자식 노드를 실행하고 실행 결과를 받아온다.
-            var nodeState = child.Evaluate(blackboard);
+            var nodeState = child.Evaluate(monsterStats);
             
             // 자식 노드의 실행이 끝나면 현재 시간을 저장
             if (nodeState != NodeState.Running)

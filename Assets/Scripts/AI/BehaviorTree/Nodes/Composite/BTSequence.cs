@@ -10,11 +10,11 @@ namespace AI.BehaviorTree.Nodes
     // 이 노드는 일반적으로 여러 행동을 순차적으로 실행할 때 사용한다.
     public class BTSequence: BTComposite
     {
-        public override NodeState Evaluate(Blackboard blackboard)
+        public override NodeState Evaluate(MonsterStats monsterStats)
         {
             foreach (var child in children)
             {
-                var childState = child.Evaluate(blackboard);
+                var childState = child.Evaluate(monsterStats);
                 if (childState == NodeState.Failure)
                 {
                     state = NodeState.Failure;

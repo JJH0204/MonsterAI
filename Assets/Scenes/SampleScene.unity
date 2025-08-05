@@ -250,7 +250,7 @@ Transform:
   m_GameObject: {fileID: 285007323}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.02, z: 1.71}
+  m_LocalPosition: {x: 19.77, y: 1.02, z: 18.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 736042793}
   - component: {fileID: 736042794}
   - component: {fileID: 736042788}
+  - component: {fileID: 736042795}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Enemy
@@ -470,10 +471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tree: {fileID: 11400000, guid: 7cf8684639e1dfe409cd72a4c6909029, type: 2}
-  monsterStats:
-    navMeshAgent: {fileID: 736042794}
-    body: {fileID: 736042792}
-    target: {fileID: 285007328}
+  monsterStats: {fileID: 736042795}
 --- !u!65 &736042789
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -554,7 +552,7 @@ Transform:
   m_GameObject: {fileID: 736042787}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.02, z: -1.79}
+  m_LocalPosition: {x: -14.26, y: 1.02, z: -16.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -609,6 +607,45 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &736042795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736042787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ee44cb7ef9c447a9424561f0a38699e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 1
+  navMeshAgent: {fileID: 736042794}
+  agent: {fileID: 736042787}
+  target: {fileID: 285007323}
+  health: 100
+  maxHealth: 100
+  detectionRange: 4
+  attack1Range: 2
+  attack1Damage: 10
+  attack1Cooldown: 1
+  attack2Range: 1.8
+  attack2Damage: 10
+  attack2Cooldown: 1
+  speed: 3.5
+  rotationSpeed: 5
+  chaseSpeed: 5
+  fleeSpeed: 7
+  fleeHealthThreshold: 30
+  patrolPath:
+  - {x: -5.9, y: 0, z: -17.7}
+  - {x: 6.73, y: 0, z: -17.7}
+  - {x: 6.73, y: 0, z: -7.7}
+  - {x: -5.75, y: 0, z: -7.7}
+  - {x: -14.49, y: 0, z: -7.7}
+  - {x: -14.49, y: 0, z: 0.32}
+  patrolTimer: 5
+  patrolColTimer: 5
 --- !u!1 &865703481
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,7 +747,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -816,7 +853,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1452248661}
-  - component: {fileID: 1452248660}
+  - component: {fileID: 1452248662}
   m_Layer: 0
   m_Name: MonsterManager
   m_TagString: Untagged
@@ -824,19 +861,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1452248660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452248659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec09f32563626074b83399e3f912377d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 285007323}
 --- !u!4 &1452248661
 Transform:
   m_ObjectHideFlags: 0
@@ -852,6 +876,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1452248662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452248659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a7bd988abbb4f24be78004fbc288e4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsters: []
+  player: {fileID: 285007323}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -859,7 +897,7 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 1452248661}
+  - {fileID: 549810764}
   - {fileID: 865703485}
   - {fileID: 736042792}
   - {fileID: 285007328}
-  - {fileID: 549810764}

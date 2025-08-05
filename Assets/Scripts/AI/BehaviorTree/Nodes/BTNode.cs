@@ -42,7 +42,7 @@ namespace AI.BehaviorTree.Nodes
         public virtual void OnEnter() { }
         public virtual void OnExit() { }
         public virtual void Reset() { }
-        public abstract NodeState Evaluate(Blackboard blackboard);
+        public abstract NodeState Evaluate(MonsterStats monsterStats);
         public virtual void OnValidateNode() { }
     }
 }

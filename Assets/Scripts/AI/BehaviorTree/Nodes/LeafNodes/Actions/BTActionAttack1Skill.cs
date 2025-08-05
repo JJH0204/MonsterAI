@@ -1,0 +1,15 @@
+﻿using UnityEngine;
+
+namespace AI.BehaviorTree.Nodes
+{
+    [CreateAssetMenu(menuName = "BehaviorTree/Action/Attack1Skill")]
+    public class BTActionAttack1Skill : BTNode
+    {
+        public override NodeState Evaluate(MonsterStats monsterStats)
+        {
+            Debug.Log("Monster is Using Skill 1: " + monsterStats.name);
+            monsterStats.State = MonsterState.Attack;
+            return state = NodeState.Success;
+        }
+    }
+}

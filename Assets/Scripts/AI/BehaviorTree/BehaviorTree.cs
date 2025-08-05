@@ -8,20 +8,20 @@ namespace AI.BehaviorTree
     public class BehaviorTree : ScriptableObject
     {
         public BTNode rootNode;
-        public Blackboard blackboard;
+        // public MonsterStats blackboard;
 
-        public void Init(MonsterStats monsterStats)
+        public void Init()
         {
-            blackboard.target = monsterStats.target;
-            blackboard.navMeshAgent = monsterStats.navMeshAgent;
-            blackboard.body = monsterStats.body;
+            // blackboard.target = monsterStats.target;
+            // blackboard.navMeshAgent = monsterStats.navMeshAgent;
+            // blackboard.agent = monsterStats.gameObject;
             
             rootNode?.OnValidateNode();
         }
 
-        public NodeState Tick()
+        public NodeState Tick(MonsterStats monsterStats)
         {
-            return rootNode?.Evaluate(blackboard) ?? NodeState.Failure;
+            return rootNode?.Evaluate(monsterStats) ?? NodeState.Failure;
         }
         
         public List<BTNode> GetAllNodes()
@@ -46,5 +46,7 @@ namespace AI.BehaviorTree
                 CollectNodes(decorator.child, nodes);
             }
         }
+        
+        
     }
 }

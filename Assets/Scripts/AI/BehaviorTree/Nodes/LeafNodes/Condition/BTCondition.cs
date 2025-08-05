@@ -4,11 +4,11 @@ namespace AI.BehaviorTree.Nodes
 {
     public abstract class BTCondition : BTNode
     {
-        public override NodeState Evaluate(Blackboard blackboard)
+        public override NodeState Evaluate(MonsterStats monsterStats)
         {
-            return CheckCondition(blackboard) ? state = NodeState.Success : NodeState.Failure;
+            return CheckCondition(monsterStats) ? state = NodeState.Success : NodeState.Failure;
         }
 
-        protected abstract bool CheckCondition(Blackboard blackboard);
+        protected abstract bool CheckCondition(MonsterStats monsterStats);
     }
 }

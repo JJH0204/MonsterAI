@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46cf434158bf475bba0cdcf950557ca4, type: 3}
-  m_Name: New BT Cooldown
+  m_Script: {fileID: 11500000, guid: ced75fabe5dd46528ca1d8f7a1110a56, type: 3}
+  m_Name: Skill2
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
   guid: 
   position: {x: 0, y: 0}
   input: {fileID: 0}
   outputs: []
-  child: {fileID: 0}
-  cooldownTime: 0
+  children:
+  - {fileID: 11400000, guid: e3aa28724c6133c4dbf6aba206b329ec, type: 2}
+  - {fileID: 11400000, guid: 662cb5bae564fe749bd2a2cf592ed88a, type: 2}

@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ced75fabe5dd46528ca1d8f7a1110a56, type: 3}
-  m_Name: Death Sequence
+  m_Script: {fileID: 11500000, guid: a664d7b1cfd54a0daf691c4b1fb9d6bb, type: 3}
+  m_Name: Is Hit
   m_EditorClassIdentifier: 
   state: 0
   name: Root
@@ -18,4 +18,3 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   input: {fileID: 0}
   outputs: []
-  children: []

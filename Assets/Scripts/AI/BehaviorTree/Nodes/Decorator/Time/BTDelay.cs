@@ -18,7 +18,7 @@ namespace AI.BehaviorTree.Nodes
             _isDelaying = true;
         }
         
-        public override NodeState Evaluate(Blackboard blackboard)
+        public override NodeState Evaluate(MonsterStats monsterStats)
         {
             if (!_isStarted)
             {
@@ -37,7 +37,7 @@ namespace AI.BehaviorTree.Nodes
             if (child is null)
                 return NodeState.Success;
             
-            return state = child.Evaluate(blackboard);
+            return state = child.Evaluate(monsterStats);
         }
     }
 }

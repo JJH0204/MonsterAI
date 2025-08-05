@@ -7,12 +7,12 @@ namespace AI.BehaviorTree.Nodes
     [CreateAssetMenu(menuName = "BehaviorTree/Composite/Parallel")]
     public class BTParallel : BTComposite
     {
-        public override NodeState Evaluate(Blackboard blackboard)
+        public override NodeState Evaluate(MonsterStats monsterStats)
         {
             // 모든 자식 노드를 실행만 함
             foreach (var child in children)
             {
-                child.Evaluate(blackboard);
+                child.Evaluate(monsterStats);
             }
             
             // 실행 즉시 성공 반환
