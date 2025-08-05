@@ -25,8 +25,9 @@ namespace AI.BehaviorTree.Nodes
                 return false;
             }
             // 몬스터의 타겟과의 거리가 공격 범위 이내인지 확인
-            var distanceToTarget = Vector3.Distance(monsterStats.Agent.transform.position, monsterStats.Target.transform.position);
-            return distanceToTarget <= monsterStats.Attack2Range;
+            if (monsterStats.TargetDistance <= monsterStats.Attack2Range)
+                return true;
+            return false;
         }
     }
 }

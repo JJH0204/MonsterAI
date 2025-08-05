@@ -26,9 +26,9 @@ namespace AI.BehaviorTree.Nodes
             }
             // 몬스터의 타겟과의 거리가 공격 범위 이내인지 확인
             
-            var distanceToTarget = Vector3.Distance(monsterStats.Agent is not null ? monsterStats.Agent.transform.position : monsterStats.transform.position, monsterStats.Target.transform.position);
+            // var distanceToTarget = Vector3.Distance(monsterStats.Agent is not null ? monsterStats.Agent.transform.position : monsterStats.transform.position, monsterStats.Target.transform.position);
             // TODO: StackOverflowException: The requested operation caused a stack overflow.
-            if (distanceToTarget <= monsterStats.Attack1Range)
+            if (monsterStats.TargetDistance <= monsterStats.Attack1Range)
                 return true;
             return false;
         }

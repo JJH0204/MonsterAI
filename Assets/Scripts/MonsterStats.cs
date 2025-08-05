@@ -44,6 +44,7 @@ public class MonsterStats : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;      // 추적 속도
     [SerializeField] private float fleeSpeed = 7f;       // 도망 속도
     [SerializeField] private float fleeHealthThreshold = 30f; // 도망치는 체력 임계값
+    [SerializeField] private float targetDistance;       // 타겟과의 거리
     
     [Header("Patrol Stats")]
     // [SerializeField] private float wanderRadius = 10f;   // 방황 반경
@@ -71,6 +72,8 @@ public class MonsterStats : MonoBehaviour
     public float ChaseSpeed => chaseSpeed;
     public float FleeSpeed => fleeSpeed;
     public float FleeHealthThreshold => fleeHealthThreshold;
+    public float TargetDistance => targetDistance; 
+    
     // public float WanderRadius => wanderRadius;
     public Vector3[] PatrolPath => patrolPath;        // 방황 경로
     public float PatrolTimer => patrolTimer;
@@ -95,7 +98,7 @@ public class MonsterStats : MonoBehaviour
 
     private void Update()
     {
-        
+        targetDistance = Vector3.Distance(Agent.transform.position, Target.transform.position);
     }
     
     // Gizmo를 사용하여 몬스터의 인식 범위를 시각적으로 표시

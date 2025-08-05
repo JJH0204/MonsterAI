@@ -42,6 +42,23 @@ namespace AI.BehaviorTree.Nodes
         public virtual void OnEnter() { }
         public virtual void OnExit() { }
         public virtual void Reset() { }
+        // 무한 루프 방지용 Evaluate 오버로드
+        public NodeState SafeEvaluate(MonsterStats monsterStats, HashSet<BTNode> visited = null)
+        {
+            if (visited == null) visited = new HashSet<BTNode>();
+            if (visited.Contains(this))
+            {
+                Debug.LogError($"[BehaviorTree] 순환 참조 감지: {name}");
+                return NodeState.Failure;
+            }
+            visited.Add(this);
+            return EvaluateInternal(monsterStats, visited);
+        }
+        // 하위 노드에서 오버라이드할 내부 Evaluate
+        protected virtual NodeState EvaluateInternal(MonsterStats monsterStats, HashSet<BTNode> visited)
+        {
+            return Evaluate(monsterStats); // 기존 Evaluate 유지
+        }
         public abstract NodeState Evaluate(MonsterStats monsterStats);
         public virtual void OnValidateNode() { }
     }
