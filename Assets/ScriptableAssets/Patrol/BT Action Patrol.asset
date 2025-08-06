@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004a6ac8685d4b4f96520cf0549f332b, type: 3}
   m_Name: BT Action Patrol
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
-  guid: 
-  position: {x: 0, y: 0}
+  guid: cedf176e-a324-4e04-b84f-bb998a8a0775
+  position: {x: 164, y: 930}
   input: {fileID: 0}
   outputs: []

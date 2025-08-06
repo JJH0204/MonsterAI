@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d432e83d9c5408ca9f89cfdcc69f15f, type: 3}
   m_Name: Is Combat Nearby
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
-  guid: 
-  position: {x: 0, y: 0}
+  guid: adc2cc39-8ae4-426a-9bea-e160ee2ba398
+  position: {x: 525, y: 385.49997}
   input: {fileID: 0}
   outputs: []

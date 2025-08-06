@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AI.BehaviorTree.Nodes
 {
     [CreateAssetMenu(menuName = "BehaviorTree/Action/Death")]
-    public class BTActionDeath : BTNode
+    public class BTActionDeath : BTAction
     {
         public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {

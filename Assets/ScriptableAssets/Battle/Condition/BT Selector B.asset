@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976b6677885a41739ad8b6b8804fc302, type: 3}
   m_Name: BT Selector B
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
-  guid: 
-  position: {x: 0, y: 0}
+  guid: 5fdd3c04-ab5f-427c-8a48-2d5fb1358603
+  position: {x: 323.00003, y: 264.5}
   input: {fileID: 0}
   outputs: []
   children:

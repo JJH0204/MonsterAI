@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   name: Root
-  guid: 
-  position: {x: 0, y: 0}
+  guid: 79f42eaa-a450-4b9c-a2db-fc98b87dc8aa
+  position: {x: 523, y: 508.5}
   input: {fileID: 0}
   outputs: []

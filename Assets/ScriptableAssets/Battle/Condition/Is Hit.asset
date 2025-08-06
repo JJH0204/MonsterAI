@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a664d7b1cfd54a0daf691c4b1fb9d6bb, type: 3}
   m_Name: Is Hit
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
-  guid: 
-  position: {x: 0, y: 0}
+  guid: cd79c5db-8ea1-4348-b794-493099f0d7cb
+  position: {x: 533, y: 222.50002}
   input: {fileID: 0}
   outputs: []

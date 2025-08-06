@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AI.BehaviorTree.Nodes
 {
     [CreateAssetMenu(menuName = "BehaviorTree/Action/Attack2Skill")]
-    public class BTActionAttack2Skill : BTNode
+    public class BTActionAttack2Skill : BTAction
     {
         public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {

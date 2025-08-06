@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa66eef1fe054781a8b11d4562a47f83, type: 3}
   m_Name: IsDeath
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
-  guid: 
-  position: {x: 0, y: 0}
+  guid: eb046104-275a-4ceb-b2ec-8a97c2771966
+  position: {x: 25.953552, y: 14.705841}
   input: {fileID: 0}
   outputs: []
