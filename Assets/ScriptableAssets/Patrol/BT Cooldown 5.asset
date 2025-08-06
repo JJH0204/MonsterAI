@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ced75fabe5dd46528ca1d8f7a1110a56, type: 3}
-  m_Name: Patrol
+  m_Script: {fileID: 11500000, guid: 46cf434158bf475bba0cdcf950557ca4, type: 3}
+  m_Name: BT Cooldown 5
   m_EditorClassIdentifier: 
   state: 1
   name: Root
   guid: 
   position: {x: 0, y: 0}
-  input: {fileID: 11400000, guid: ab39fce4334de9541b00c9d8f1097a40, type: 2}
+  input: {fileID: 0}
   outputs: []
-  children:
-  - {fileID: 11400000, guid: 910a932d689ed854f87407b4619234a6, type: 2}
+  child: {fileID: 11400000, guid: 6023706d57d4c4d438a0778a4c6d004c, type: 2}
+  cooldownTime: 2

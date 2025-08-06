@@ -24,37 +24,6 @@ namespace AI.BehaviorTree.Nodes
             if (CheckCycle(visited))
                 return NodeState.Failure;
             
-            // state = NodeState.Running;
-            // // Patrol 행동은 몬스터가 지정된 경로를 따라 이동하는 행동이다.
-            //
-            // if (monsterStats is null) return state = NodeState.Failure;
-            //
-            // // 이동 경로를 지정
-            // if (monsterStats.PatrolPath == null || monsterStats.PatrolPath.Length == 0)
-            // {
-            //     Debug.LogWarning("Patrol path is not set or empty.");
-            //     return state = NodeState.Failure;
-            // }
-            //
-            // // 남은 페트롤 시간 동안 이동 하도록
-            // patrolTimer += Time.deltaTime;
-            //
-            // if ((patrolTimer <= 0f) ||
-            //     (monsterStats.NavMeshAgent.remainingDistance <= monsterStats.NavMeshAgent.stoppingDistance))
-            //     currentPatrolIndex = (currentPatrolIndex + 1) % monsterStats.PatrolPath.Length;
-            //
-            // if (patrolTimer > monsterStats.PatrolTimer)
-            // {
-            //     patrolTimer = 0f;
-            //     return state = NodeState.Failure; // 페트롤 시간이 초과하면 이동 하지 않음
-            // }
-            //
-            // // 현재 경로 지점으로 이동
-            // Vector3 targetPosition = monsterStats.PatrolPath[currentPatrolIndex];
-            // monsterStats.NavMeshAgent.SetDestination(targetPosition);
-            //
-            // monsterStats.State = MonsterState.Patrol;
-            
             if (!_isStarted)
             {
                 OnEnter(monsterStats); // 초기화가 안 된 경우 초기화
@@ -62,32 +31,32 @@ namespace AI.BehaviorTree.Nodes
             }
             
             // 패트롤 시간 초과 될 때까지 이동
-            if (_isPatrolling)
-            {
-                if (Time.time - _startTime >= monsterStats.PatrolTimer)
-                {
-                    _isPatrolling = false;
-                    _isStarted = false;
-                    monsterStats.NavMeshAgent.isStopped = true; // NavMeshAgent를 멈춤
-                    monsterStats.NavMeshAgent.ResetPath(); // 현재 경로를 초기화
-                    return state = NodeState.Failure;
-                }
-                
-                if (monsterStats.NavMeshAgent.remainingDistance <= monsterStats.NavMeshAgent.stoppingDistance)
-                {
-                    _postPatrolIndex = _currentPatrolIndex; // 현재 인덱스를 저장
-                    // 다음 경로 지점으로 이동
-                    _currentPatrolIndex = (_currentPatrolIndex + 1) % monsterStats.PatrolPath.Length;
-                    if (_currentPatrolIndex == _postPatrolIndex)
-                        // 다음 경로 지점이 현재 지점과 같으면, 다시 시작
-                        _currentPatrolIndex = (_currentPatrolIndex + 1) % monsterStats.PatrolPath.Length;
-                }
-                
-                var targetPosition = monsterStats.PatrolPath[_currentPatrolIndex];
-                monsterStats.NavMeshAgent.SetDestination(targetPosition);
-            }
+            if (!_isPatrolling) return state = NodeState.Failure;
             
-            return state = NodeState.Running; // 여전히 이동 중이므로 Running 상태 반환
+            if (Time.time - _startTime >= monsterStats.PatrolTimer)
+            {
+                _isPatrolling = false;
+                _isStarted = false;
+                monsterStats.NavMeshAgent.isStopped = true; // NavMeshAgent를 멈춤
+                monsterStats.NavMeshAgent.ResetPath(); // 현재 경로를 초기화
+                return state = NodeState.Failure;
+            }
+                
+            if (monsterStats.NavMeshAgent.remainingDistance <= monsterStats.NavMeshAgent.stoppingDistance)
+            {
+                _postPatrolIndex = _currentPatrolIndex; // 현재 인덱스를 저장
+                // 다음 경로 지점으로 이동
+                _currentPatrolIndex = (_currentPatrolIndex + 1) % monsterStats.PatrolPath.Length;
+                if (_currentPatrolIndex == _postPatrolIndex)
+                    // 다음 경로 지점이 현재 지점과 같으면, 다시 시작
+                    _currentPatrolIndex = (_currentPatrolIndex + 1) % monsterStats.PatrolPath.Length;
+            }
+                
+            var targetPosition = monsterStats.PatrolPath[_currentPatrolIndex];
+            monsterStats.NavMeshAgent.SetDestination(targetPosition);
+                
+            monsterStats.State = MonsterState.Patrol;
+            return state = NodeState.Running;
         }
     }
 }
