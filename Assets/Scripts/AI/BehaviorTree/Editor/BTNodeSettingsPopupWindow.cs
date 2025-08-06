@@ -1,15 +1,36 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using AI.BehaviorTree.Nodes;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-public class BTNodeSettingsPopupWindow : EditorWindow
+public class BTNodeSettingsPopupWindow : VisualElement
 {
     private BTNode _targetNode;
     private Label _nodeTypeLabel;
     private TextField _nodeNameField;
     private System.Action _onNodeChanged;
     private BTGraphView _graphView;
+    private Editor _nodeEditor;
+    private IMGUIContainer _inspectorContainer;
+
+    public BTNodeSettingsPopupWindow()
+    {
+        style.flexDirection = FlexDirection.Column;
+        style.paddingLeft = 10;
+        style.paddingRight = 10;
+        style.paddingTop = 10;
+        style.paddingBottom = 10;
+        style.backgroundColor = new Color(0.18f, 0.18f, 0.18f, 1f);
+        style.borderTopWidth = 1;
+        style.borderBottomWidth = 1;
+        style.borderLeftWidth = 1;
+        style.borderRightWidth = 1;
+        style.minWidth = 320;
+        style.maxWidth = 320;
+        style.minHeight = 120;
+        style.maxHeight = 400;
+    }
 
     public void SetTargetNode(BTNode node, BTGraphView graphView)
     {
@@ -20,80 +41,106 @@ public class BTNodeSettingsPopupWindow : EditorWindow
 
     private void CreateUI()
     {
-        rootVisualElement.Clear();
+        Clear();
         if (_targetNode == null)
         {
-            rootVisualElement.Add(new Label("노드가 선택되지 않았습니다."));
+            Add(new Label("노드가 선택되지 않았습니다."));
             return;
         }
-
-        _nodeTypeLabel = new Label($"노드 타입: {_targetNode.GetType().Name}");
-        rootVisualElement.Add(_nodeTypeLabel);
-
-        _nodeNameField = new TextField("노드 이름") { value = _targetNode.name };
-        _nodeNameField.RegisterValueChangedCallback(evt =>
+        // UIElements 기반 커스텀 인스팩터 예시
+        var nameField = new TextField("노드 이름") { value = _targetNode.name };
+        nameField.isDelayed = true;
+        nameField.RegisterValueChangedCallback(evt =>
         {
-            _targetNode.name = evt.newValue;
-            EditorUtility.SetDirty(_targetNode);
-            AssetDatabase.SaveAssets();
-            _onNodeChanged?.Invoke();
+            if (_targetNode.name != evt.newValue)
+            {
+                _targetNode.name = evt.newValue;
+                EditorUtility.SetDirty(_targetNode);
+                AssetDatabase.SaveAssets();
+                _graphView?.RedrawTree();
+                nameField.Focus();
+            }
         });
-        rootVisualElement.Add(_nodeNameField);
+        Add(nameField);
 
-        // Composite 노드의 경우 자식 리스트 Inspector 스타일로 표시 (읽기 전용)
+        // 자식 노드 UI (Composite, Decorator)
         if (_targetNode is BTComposite composite)
         {
-            var childList = new ListView(composite.children, 20, () => new Label(), (elem, i) =>
+            var childrenLabel = new Label("자식 노드 목록");
+            Add(childrenLabel);
+            for (int i = 0; i < composite.children.Count; i++)
             {
-                var child = composite.children[i];
-                (elem as Label).text = child != null ? child.name : "(비어 있음)";
-            });
-            childList.selectionType = SelectionType.None;
-            childList.style.marginTop = 8;
-            childList.style.marginBottom = 8;
-            rootVisualElement.Add(new Label("자식 노드 리스트 (Out 포트 수):"));
-            rootVisualElement.Add(childList);
-
-            // Out 포트 추가 버튼
-            var addOutPortBtn = new Button(() =>
+                var childField = new ObjectField($"자식 {i + 1}")
+                {
+                    objectType = typeof(BTNode),
+                    value = composite.children[i],
+                    allowSceneObjects = false
+                };
+                int idx = i;
+                childField.RegisterValueChangedCallback(evt =>
+                {
+                    composite.children[idx] = evt.newValue as BTNode;
+                    EditorUtility.SetDirty(_targetNode);
+                    AssetDatabase.SaveAssets();
+                    _graphView?.RedrawTree();
+                    childField.Focus();
+                });
+                Add(childField);
+            }
+            // 자식 노드 추가 버튼
+            var addChildBtn = new Button(() =>
             {
-                composite.children.Add(null); // 빈 슬롯 추가
+                composite.children.Add(null);
                 EditorUtility.SetDirty(_targetNode);
                 AssetDatabase.SaveAssets();
-                _graphView?.RedrawTree(); // 그래프 뷰 즉시 갱신
-                CreateUI(); // 설정창 즉시 갱신
-            }) { text = "Out 포트 추가" };
-            rootVisualElement.Add(addOutPortBtn);
-
-            // Out 포트 삭제 버튼
-            var removeOutPortBtn = new Button(() =>
+                _graphView?.RedrawTree();
+            }) { text = "자식 노드 추가" };
+            Add(addChildBtn);
+            
+            // 자식 노드 삭제 버튼
+            var removeChildBtn = new Button(() =>
             {
-                if (composite.children.Count == 0)
+                if (composite.children.Count > 0)
                 {
-                    Debug.LogWarning("삭제할 Out 포트가 없습니다.");
-                    return;
+                    composite.children.RemoveAt(composite.children.Count - 1);
+                    EditorUtility.SetDirty(_targetNode);
+                    AssetDatabase.SaveAssets();
+                    _graphView?.RedrawTree();
                 }
-                var lastChild = composite.children[composite.children.Count - 1];
-                if (lastChild != null)
-                {
-                    Debug.LogWarning("마지막 Out 포트에 연결된 자식 노드가 있으므로 삭제할 수 없습니다.");
-                    return;
-                }
-                composite.children.RemoveAt(composite.children.Count - 1);
-                EditorUtility.SetDirty(_targetNode);
-                AssetDatabase.SaveAssets();
-                _graphView?.RedrawTree(); // 그래프 뷰 즉시 갱신
-                CreateUI(); // 설정창 즉시 갱신
-            }) { text = "Out 포트 삭제" };
-            rootVisualElement.Add(removeOutPortBtn);
+            }) { text = "자식 노드 삭제" };
+            Add(removeChildBtn);
         }
-        // Decorator 노드의 경우 자식 정보만 표시 (읽기 전용)
         else if (_targetNode is BTDecorator decorator)
         {
-            rootVisualElement.Add(new Label("자식 노드 (Out 포트):"));
-            var childName = decorator.child != null ? decorator.child.name : "(비어 있음)";
-            var childLabel = new Label(childName);
-            rootVisualElement.Add(childLabel);
+            var childField = new ObjectField("자식 노드")
+            {
+                objectType = typeof(BTNode),
+                value = decorator.child,
+                allowSceneObjects = false
+            };
+            childField.RegisterValueChangedCallback(evt =>
+            {
+                decorator.child = evt.newValue as BTNode;
+                EditorUtility.SetDirty(_targetNode);
+                AssetDatabase.SaveAssets();
+                _graphView?.RedrawTree();
+                childField.Focus();
+            });
+            Add(childField);
+            
+            // 타입별 특수 필드 UI 정의 예시
+            // if (decorator is BTRepeatDecorator repeat)
+            // {
+            //     var countField = new IntegerField("반복 횟수") { value = repeat.count };
+            //     countField.RegisterValueChangedCallback(evt => {
+            //         repeat.count = evt.newValue;
+            //         EditorUtility.SetDirty(repeat);
+            //         AssetDatabase.SaveAssets();
+            //     });
+            //     Add(countField);
+            // }
+            // TODO: 아래에 다른 Decorator 타입에 대한 필드 추가 가능
+            
         }
     }
 }

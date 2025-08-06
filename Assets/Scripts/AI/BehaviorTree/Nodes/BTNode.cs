@@ -20,7 +20,8 @@ namespace AI.BehaviorTree.Nodes
         
         #region GraphView Setting
 
-        [HideInInspector] public new string name;                   // 노드 이름
+        public new string name;                   // 노드 이름
+        
         [HideInInspector] public string guid;                       // 노드 GUI
         [HideInInspector] public Vector2 position;                  // 노드 좌표
         [HideInInspector] public BTNode input;                      // 입력 (부모 노드)

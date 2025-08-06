@@ -15,10 +15,6 @@ namespace AI.BehaviorTree
 
         public void Init()
         {
-            // blackboard.target = monsterStats.target;
-            // blackboard.navMeshAgent = monsterStats.navMeshAgent;
-            // blackboard.agent = monsterStats.gameObject;
-
             if (rootNode == null)
             {
                 Debug.LogWarning("[BehaviorTree] Root node is null.");
@@ -80,6 +76,30 @@ namespace AI.BehaviorTree
             AssetDatabase.AddObjectToAsset(selector, this);
             AssetDatabase.SaveAssets();
             Debug.Log("[BehaviorTree] 루트 노드가 자동 생성되었습니다.");
+        }
+
+        public BTNode GetNodeByGuid(string guid)
+        {
+            foreach (var node in GetAllNodes())
+            {
+                if (node != null && node.guid == guid)
+                    return node;
+            }
+            return null;
+        }
+
+        // 트리 에셋에 포함된 모든 BTNode 반환
+        public List<BTNode> GetAllAssetNodes()
+        {
+            var assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
+            var assets = UnityEditor.AssetDatabase.LoadAllAssetsAtPath(assetPath);
+            var nodes = new List<BTNode>();
+            foreach (var asset in assets)
+            {
+                if (asset is BTNode node)
+                    nodes.Add(node);
+            }
+            return nodes;
         }
     }
 }

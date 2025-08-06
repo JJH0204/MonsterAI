@@ -10,6 +10,10 @@ public class BTEditorWindow : EditorWindow
     private BTGraphView _graphView;
     private BehaviorTree _currentTree;
     private BTNode _selectedNode;
+    private BTNodeSettingsPopupWindow _settingsPopup;
+    private IEnumerable<object> _lastSelection;
+
+    private bool autoSaveEnabled = true; // 자동 저장 여부
 
     [MenuItem("Window/AI/Behavior Tree Editor")]
     public static void Open()
@@ -20,16 +24,47 @@ public class BTEditorWindow : EditorWindow
     private void OnEnable()
     {
         Selection.selectionChanged += OnSelectionChanged;
+        EditorApplication.update += OnEditorUpdate;
         Refresh();
     }
     private void OnDisable()
     {
         Selection.selectionChanged -= OnSelectionChanged;
+        EditorApplication.update -= OnEditorUpdate;
     }
 
     private void OnSelectionChanged()
     {
         Refresh();
+    }
+
+    private void OnEditorUpdate()
+    {
+        if (_graphView != null)
+        {
+            var currentSelection = _graphView.selection;
+            // selection이 변경된 경우에만 처리
+            if (_lastSelection == null || !AreSelectionsEqual(currentSelection, _lastSelection))
+            {
+                _lastSelection = new List<object>(currentSelection);
+                OnNodeSelectionChanged(currentSelection);
+            }
+        }
+    }
+
+    // selection 비교 함수
+    private bool AreSelectionsEqual(IEnumerable<object> a, IEnumerable<object> b)
+    {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        var listA = new List<object>(a);
+        var listB = new List<object>(b);
+        if (listA.Count != listB.Count) return false;
+        for (int i = 0; i < listA.Count; i++)
+        {
+            if (!Equals(listA[i], listB[i])) return false;
+        }
+        return true;
     }
 
     private void Refresh()
@@ -45,26 +80,17 @@ public class BTEditorWindow : EditorWindow
         topBar.style.flexShrink = 0;
         topBar.style.flexDirection = FlexDirection.Row;
 
+        var autoSaveToggle = new Toggle("자동 저장") { value = autoSaveEnabled };
+        autoSaveToggle.RegisterValueChangedCallback(evt =>
+        {
+            autoSaveEnabled = evt.newValue;
+        });
+        topBar.Add(autoSaveToggle);
+
         var saveButton = new Button(SaveTreeNodes) { text = "Save Tree" };
         topBar.Add(saveButton);
 
-        // var nodeTypes = new List<string> { "BTSequence", "BTSelector", "BTAction", "BTCondition", "BTDecorator" };
-        // var nodeTypeField = new PopupField<string>(nodeTypes, 0);
-        // nodeTypeField.style.width = 120;
-        // topBar.Add(nodeTypeField);
-        //
-        // var addNodeButton = new Button(() => AddNode(nodeTypeField.value)) { text = "노드 추가" };
-        // topBar.Add(addNodeButton);
-
-        var deleteNodeButton = new Button(DeleteSelectedNode) { text = "노드 삭제" };
-        deleteNodeButton.SetEnabled(_selectedNode != null);
-        topBar.Add(deleteNodeButton);
-
-        var deleteOrphanNodeButton = new Button(DeleteOrphanNode) { text = "고아 노드 삭제" };
-        deleteOrphanNodeButton.SetEnabled(true);
-        topBar.Add(deleteOrphanNodeButton);
-
-        var deleteAllOrphanNodesButton = new Button(DeleteAllOrphanNodes) { text = "모든 고아 노드 일괄 삭제" };
+        var deleteAllOrphanNodesButton = new Button(DeleteAllOrphanNodes) { text = "고아 일괄 삭제" };
         deleteAllOrphanNodesButton.SetEnabled(true);
         topBar.Add(deleteAllOrphanNodesButton);
 
@@ -75,8 +101,11 @@ public class BTEditorWindow : EditorWindow
             _currentTree = selectedTree;
             _graphView = new BTGraphView(_currentTree);
             _graphView.style.flexGrow = 1;
-            _graphView.RegisterCallback<MouseDownEvent>(OnGraphViewMouseDown);
+            // 노드 선택 이벤트 등록
+            _graphView.OnNodeSelectionChanged += OnNodeSelectionChanged;
             container.Add(_graphView);
+            // 트리 갱신 시 모든 노드가 잘 보이도록 자동 프레이밍
+            _graphView.FrameAllNodes();
         }
         else
         {
@@ -87,12 +116,23 @@ public class BTEditorWindow : EditorWindow
             container.Add(label);
         }
         rootVisualElement.Add(container);
+
+        // 항상 설정 팝업을 오른쪽에 표시
+        if (_settingsPopup == null)
+        {
+            _settingsPopup = new BTNodeSettingsPopupWindow();
+            _settingsPopup.style.position = Position.Absolute;
+            _settingsPopup.style.right = 10;
+            _settingsPopup.style.top = 50;
+        }
+        rootVisualElement.Add(_settingsPopup);
+        // 노드 선택 상태에 따라 정보 갱신
+        _settingsPopup.SetTargetNode(_selectedNode, _graphView);
     }
 
-    private void OnGraphViewMouseDown(MouseDownEvent evt)
+    // 노드 선택 시 설정 팝업만 갱신 (Refresh 호출 제거)
+    private void OnNodeSelectionChanged(IEnumerable<object> selection)
     {
-        if (_graphView == null) return;
-        var selection = _graphView.selection;
         _selectedNode = null;
         foreach (var item in selection)
         {
@@ -102,12 +142,9 @@ public class BTEditorWindow : EditorWindow
                 break;
             }
         }
-        Refresh(); // 버튼 활성화 갱신
-        // 노드 설정창 갱신을 위해 그래프 뷰 전달
-        if (_selectedNode is BTSelector || _selectedNode is BTSequence)
-        {
-            ShowNodeSettingsWindow(_selectedNode, _graphView);
-        }
+        // 설정 팝업만 갱신
+        _settingsPopup?.SetTargetNode(_selectedNode, _graphView);
+        // 버튼 상태 갱신 필요시 별도 처리
     }
 
     private void AddNode(string nodeType)
@@ -230,12 +267,5 @@ public class BTEditorWindow : EditorWindow
         AssetDatabase.SaveAssets();
         Debug.Log($"삭제된 고아 노드 수: {deleteCount}");
         Refresh();
-    }
-
-    public static void ShowNodeSettingsWindow(BTNode node, BTGraphView graphView)
-    {
-        var wnd = GetWindow<BTNodeSettingsPopupWindow>(true, "노드 설정", true);
-        wnd.SetTargetNode(node, graphView);
-        wnd.Show();
     }
 }

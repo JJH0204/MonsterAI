@@ -15,10 +15,14 @@ MonoBehaviour:
   state: 0
   name: Root
   guid: d8c463c2-312e-4d5a-831c-e45992ed0f27
-  position: {x: 0, y: 0}
+  position: {x: 1619, y: 737}
   input: {fileID: 0}
   outputs: []
-  children: []
+  children:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
