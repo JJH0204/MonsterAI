@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b311de98415448cf9765bdd0ba7ab30e, type: 3}
   m_Name: BT Action Chase
   m_EditorClassIdentifier: 
-  state: 0
+  state: 2
   name: Root
   guid: 75aabc14-da87-4b9e-9c27-da8aaffa21f7
-  position: {x: 362, y: 845.00006}
+  position: {x: 1457.5758, y: 1055.954}
   input: {fileID: 0}
   outputs: []

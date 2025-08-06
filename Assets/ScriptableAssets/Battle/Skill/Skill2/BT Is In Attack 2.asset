@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d7c291804ac41b685d48f596e74ab3a, type: 3}
   m_Name: BT Is In Attack 2
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   name: Root
   guid: 3b100389-24ae-4c7c-b271-b2e63cee2dc7
-  position: {x: 565.00006, y: 683.99994}
+  position: {x: 1637.5758, y: 861.954}
   input: {fileID: 0}
   outputs: []

@@ -33,8 +33,8 @@
     border-color: #7901F0;
 }
 
-.edge {
-    border-color: #F7F701;
-    border-width: 2px;
-    background-color: #cccccc;
-}
+/*.edge {*/
+/*    border-color: #F7F701;*/
+/*    border-width: 2px;*/
+/*    background-color: #cccccc;*/
+/*}*/

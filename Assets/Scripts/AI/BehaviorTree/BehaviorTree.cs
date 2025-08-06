@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
+// using AI.BehaviorTree.EditorExtensions;
 using AI.BehaviorTree.Nodes;
 using UnityEditor;
 using UnityEngine;
@@ -66,33 +67,19 @@ namespace AI.BehaviorTree
                 CollectNodes(decorator.child, nodes);
             }
         }
-        
-        // // Add Source Node
-        // [HideInInspector]
-        // public List<BTNode> nodes = new List<BTNode>();
-        //
-        // public T CreateNode<T>() where T : BTNode
-        // {
-        //     return (T)CreateNode(typeof(T));
-        // }
-        //
-        // public BTNode CreateNode(Type type)
-        // {
-        //     var node = ScriptableObject.CreateInstance(type) as BTNode;
-        //     node.name = type.Name;
-        //     node.guid = System.Guid.NewGuid().ToString();
-        //     node.position = Vector2.zero;
-        //     nodes.Add(node);
-        //     AssetDatabase.AddObjectToAsset(node, this);
-        //     AssetDatabase.SaveAssets();
-        //     return node;
-        // }
-        //
-        // public void DeleteNode(BTNode node)
-        // {
-        //     nodes.Remove(node);
-        //     AssetDatabase.RemoveObjectFromAsset(node);
-        //     AssetDatabase.SaveAssets();
-        // }
+
+        public void OnEnable()
+        {
+            // 트리 에셋이 생성될 때 루트 노드가 없으면 자동으로 셀렉터 노드("루트 노드") 생성
+            if (rootNode != null) return;
+            
+            var selector = CreateInstance<BTSelector>();
+            selector.name = "Root";
+            selector.guid = Guid.NewGuid().ToString();
+            rootNode = selector;
+            AssetDatabase.AddObjectToAsset(selector, this);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[BehaviorTree] 루트 노드가 자동 생성되었습니다.");
+        }
     }
 }

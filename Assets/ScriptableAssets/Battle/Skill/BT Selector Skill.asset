@@ -15,7 +15,7 @@ MonoBehaviour:
   state: 2
   name: Root
   guid: e495ad2a-e533-4b8b-9a96-7f2ef15e2eb9
-  position: {x: 83.00003, y: 594}
+  position: {x: 1236.5758, y: 835.95404}
   input: {fileID: 0}
   outputs: []
   children:
