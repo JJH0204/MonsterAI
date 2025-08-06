@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
@@ -18,8 +19,11 @@ namespace AI.BehaviorTree.Nodes
             _isDelaying = true;
         }
         
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
             if (!_isStarted)
             {
                 OnEnter();
@@ -37,7 +41,7 @@ namespace AI.BehaviorTree.Nodes
             if (child is null)
                 return NodeState.Success;
             
-            return state = child.Evaluate(monsterStats);
+            return state = child.Evaluate(monsterStats, visited);
         }
     }
 }

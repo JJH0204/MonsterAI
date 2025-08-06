@@ -1,12 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
 {
     public abstract class BTCondition : BTNode
     {
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
-            return CheckCondition(monsterStats) ? state = NodeState.Success : NodeState.Failure;
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
+            return CheckCondition(monsterStats) ? state = NodeState.Success : state = NodeState.Failure;
         }
 
         protected abstract bool CheckCondition(MonsterStats monsterStats);

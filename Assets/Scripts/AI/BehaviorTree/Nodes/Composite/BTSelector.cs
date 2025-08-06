@@ -17,11 +17,14 @@ namespace AI.BehaviorTree.Nodes
         //     this.position = position;
         //     this.children = children ?? new List<BTNode>();
         // }
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
             foreach (var child in children)
             {
-                var childState = child.Evaluate(monsterStats);
+                var childState = child.Evaluate(monsterStats,  visited);
                 if (childState == NodeState.Success)
                 {
                     state = NodeState.Success;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
@@ -5,8 +6,11 @@ namespace AI.BehaviorTree.Nodes
     [CreateAssetMenu(menuName = "BehaviorTree/Action/Idle")]
     public class BTActionIdle : BTAction
     {
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
             // Idle 행동은 단순히 대기 상태를 유지하는 행동이다.
             // 이 행동은 일반적으로 AI가 아무것도 하지 않고 대기할 때 사용
             

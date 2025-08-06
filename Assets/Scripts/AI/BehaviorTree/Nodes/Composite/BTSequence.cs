@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
 {
@@ -10,11 +11,14 @@ namespace AI.BehaviorTree.Nodes
     // 이 노드는 일반적으로 여러 행동을 순차적으로 실행할 때 사용한다.
     public class BTSequence: BTComposite
     {
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
             foreach (var child in children)
             {
-                var childState = child.Evaluate(monsterStats);
+                var childState = child.Evaluate(monsterStats, visited);
                 if (childState == NodeState.Failure)
                 {
                     state = NodeState.Failure;

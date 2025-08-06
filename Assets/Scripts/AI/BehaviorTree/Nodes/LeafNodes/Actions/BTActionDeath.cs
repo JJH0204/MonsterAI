@@ -7,8 +7,11 @@ namespace AI.BehaviorTree.Nodes
     [CreateAssetMenu(menuName = "BehaviorTree/Action/Death")]
     public class BTActionDeath : BTNode
     {
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
             Debug.Log("Monster is dead: " + monsterStats.name);
             // 몬스터가 사망했을 때의 처리 로직
             // 예를 들어, NavMeshAgent를 정지시키고 상태를 Dead로 설정

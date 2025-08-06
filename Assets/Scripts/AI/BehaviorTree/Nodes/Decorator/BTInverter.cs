@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
@@ -6,9 +7,12 @@ namespace AI.BehaviorTree.Nodes
     [CreateAssetMenu(menuName = "BehaviorTree/Decorator/Inverter")]
     public class BTInverter : BTDecorator
     {
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
-            var nodeState = child.Evaluate(monsterStats);
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
+            var nodeState = child.Evaluate(monsterStats, visited);
             
             if (nodeState == NodeState.Failure)
                 state = NodeState.Success;

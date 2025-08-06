@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
 {
     [CreateAssetMenu(menuName = "BehaviorTree/Action/Chase")]
     public class BTActionChase : BTAction
     {
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
             // 여기서는 단순히 상태를 반환하고 종료함
             // Debug.Log("Moving to target: " + blackboard.target.name);
             

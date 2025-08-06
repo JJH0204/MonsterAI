@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
@@ -18,8 +19,11 @@ namespace AI.BehaviorTree.Nodes
             _isPatrolling = true;
         }
         
-        public override NodeState Evaluate(MonsterStats monsterStats)
+        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
         {
+            if (CheckCycle(visited))
+                return NodeState.Failure;
+            
             // state = NodeState.Running;
             // // Patrol 행동은 몬스터가 지정된 경로를 따라 이동하는 행동이다.
             //

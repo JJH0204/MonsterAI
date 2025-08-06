@@ -21,7 +21,8 @@ namespace AI.BehaviorTree
 
         public NodeState Tick(MonsterStats monsterStats)
         {
-            return rootNode?.Evaluate(monsterStats) ?? NodeState.Failure;
+            var visited = new HashSet<BTNode>();
+            return rootNode?.Evaluate(monsterStats, visited) ?? NodeState.Failure;
         }
         
         public List<BTNode> GetAllNodes()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976b6677885a41739ad8b6b8804fc302, type: 3}
   m_Name: BT Selector Skill
   m_EditorClassIdentifier: 
-  state: 0
+  state: 2
   name: Root
   guid: 
   position: {x: 0, y: 0}
@@ -21,4 +21,4 @@ MonoBehaviour:
   children:
   - {fileID: 11400000, guid: e8d68b02008e42c46956c367ec93f190, type: 2}
   - {fileID: 11400000, guid: 166b640f3899c5f4780e3a07d5dfb258, type: 2}
-  - {fileID: 11400000}
+  - {fileID: 11400000, guid: 38517417e8edcc844907556bac4ad3ab, type: 2}
