@@ -79,7 +79,11 @@ public class BTEditorWindow : EditorWindow
         topBar.style.height = 40;
         topBar.style.flexShrink = 0;
         topBar.style.flexDirection = FlexDirection.Row;
+        topBar.AddToClassList("top-bar"); // 스타일 클래스 추가
 
+        var saveButton = new Button(SaveTreeNodes) { text = "Save Tree" };
+        topBar.Add(saveButton);
+        
         var autoSaveToggle = new Toggle("자동 저장") { value = autoSaveEnabled };
         autoSaveToggle.RegisterValueChangedCallback(evt =>
         {
@@ -87,12 +91,9 @@ public class BTEditorWindow : EditorWindow
         });
         topBar.Add(autoSaveToggle);
 
-        var saveButton = new Button(SaveTreeNodes) { text = "Save Tree" };
-        topBar.Add(saveButton);
-
-        var deleteAllOrphanNodesButton = new Button(DeleteAllOrphanNodes) { text = "고아 일괄 삭제" };
-        deleteAllOrphanNodesButton.SetEnabled(true);
-        topBar.Add(deleteAllOrphanNodesButton);
+        // var deleteAllOrphanNodesButton = new Button(DeleteAllOrphanNodes) { text = "고아 일괄 삭제" };
+        // deleteAllOrphanNodesButton.SetEnabled(true);
+        // topBar.Add(deleteAllOrphanNodesButton);
 
         container.Add(topBar);
 
@@ -116,6 +117,13 @@ public class BTEditorWindow : EditorWindow
             container.Add(label);
         }
         rootVisualElement.Add(container);
+
+        // 스타일 시트 적용 (툴바 포함)
+        var styleSheet = Resources.Load<StyleSheet>("BTStyles");
+        if (styleSheet != null)
+        {
+            rootVisualElement.styleSheets.Add(styleSheet);
+        }
 
         // 항상 설정 팝업을 오른쪽에 표시
         if (_settingsPopup == null)

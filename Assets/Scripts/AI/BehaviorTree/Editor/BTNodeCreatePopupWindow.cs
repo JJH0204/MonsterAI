@@ -23,6 +23,7 @@ public class BTNodeCreatePopupWindow : EditorWindow
     public static BTNodeCreatePopupWindow ShowPopup(BTNodeView parentNodeView, int outPortIndex, Vector2 position, BehaviorTree tree, BTGraphView graphView)
     {
         var wndNew = ScriptableObject.CreateInstance<BTNodeCreatePopupWindow>();
+        // AddToClassList("settings-popup");
         wndNew._parentNodeView = parentNodeView;
         wndNew._outPortIndex = outPortIndex;
         // 그래프 좌표계로 변환
@@ -69,36 +70,56 @@ public class BTNodeCreatePopupWindow : EditorWindow
     private void OnCreateNode()
     {
         int idx = _typeField.index;
+        
         if (idx < 0 || idx >= _nodeTypes.Count) return;
+        
         var nodeType = _nodeTypes[idx];
         var node = ScriptableObject.CreateInstance(nodeType) as BTNode;
+        
         if (node == null) return;
+        
         // 노드 생성 위치를 그래프 좌표계로 지정
         node.position = _popupPosition;
         node.guid = System.Guid.NewGuid().ToString();
         node.name = _nameField.value; // BTNode의 name만 입력값으로 설정
-        AssetDatabase.AddObjectToAsset(node, _tree);
-        AssetDatabase.SaveAssets();
+        
         // 부모 노드에 연결
         if (_parentNodeView != null && _parentNodeView.Node is BTComposite composite)
         {
             if (_outPortIndex < composite.children.Count)
+            {
                 composite.children[_outPortIndex] = node;
+                // Debug.Log($"[BTNodeCreatePopupWindow] composite.children[{_outPortIndex}]에 노드 추가: {node.name}, GUID: {node.guid}");
+            }
             else
+            {
                 composite.children.Add(node);
-            node.input = _parentNodeView.Node;
+                // Debug.Log($"[BTNodeCreatePopupWindow] composite.children.Add: {node.name}, GUID: {node.guid}");
+            }
+            // node.input = _parentNodeView.Node;
         }
         else if (_parentNodeView != null && _parentNodeView.Node is BTDecorator decorator)
         {
             decorator.child = node;
-            node.input = _parentNodeView.Node;
+            // Debug.Log($"[BTNodeCreatePopupWindow] decorator.child에 노드 추가: {node.name}, GUID: {node.guid}");
         }
+        
+        if (_parentNodeView != null && _parentNodeView.Node != null)
+            node.input = _parentNodeView.Node;
+        
+        AssetDatabase.AddObjectToAsset(node, _tree);
+        AssetDatabase.SaveAssets();
+        
         EditorUtility.SetDirty(node);
+        
         if (_parentNodeView != null)
         {
             EditorUtility.SetDirty(_parentNodeView.Node);
         }
-        AssetDatabase.SaveAssets();
+        // TODO:
+        // - 노드 생성 시점에 에러 발생 (NullReferenceException: Object reference not set to an instance of an object)
+        // - 노드 생성 후 out 포트와 연결 되지 않는 문제
+        
         // 노드 생성 후 팝업 닫기 및 그래프 뷰 갱신
         Close();
         _graphView?.RedrawTree(); // 화면 갱신
@@ -137,7 +158,7 @@ public class BTNodeCreatePopupWindow : EditorWindow
                 decorator.child = null;
             }
         }
-        
+
         // 그래프 갱신
         if (_graphView != null)
         {

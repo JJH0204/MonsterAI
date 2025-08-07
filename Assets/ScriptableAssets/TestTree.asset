@@ -15,7 +15,7 @@ MonoBehaviour:
   state: 0
   name: Action Idle
   guid: 90b46d83-46c6-43b4-97f2-c73f4a5e1061
-  position: {x: 359, y: 399}
+  position: {x: 375, y: 352}
   input: {fileID: -1840887243055140662}
   outputs: []
 --- !u!114 &-6452713840867823791
@@ -33,7 +33,7 @@ MonoBehaviour:
   state: 0
   name: Action Death
   guid: 25173a14-85fc-494f-870f-eb5d019519b7
-  position: {x: 273, y: 11}
+  position: {x: 273, y: 14.5}
   input: {fileID: -4414463533594173796}
   outputs: []
 --- !u!114 &-5138920021963573723
@@ -51,7 +51,7 @@ MonoBehaviour:
   state: 2
   name: Root
   guid: 8363f514-4a0c-4d1a-b228-277ab899e333
-  position: {x: -65.4791, y: 13.999929}
+  position: {x: -10, y: 67.5}
   input: {fileID: 0}
   outputs: []
   children:
@@ -72,7 +72,7 @@ MonoBehaviour:
   state: 1
   name: Death
   guid: 1f3b5482-c98d-4c89-8092-0c67312a2f13
-  position: {x: 87, y: -81}
+  position: {x: 121, y: -86}
   input: {fileID: -5138920021963573723}
   outputs: []
   children:
@@ -93,13 +93,12 @@ MonoBehaviour:
   state: 2
   name: Idle
   guid: f4880eaf-0598-49a6-961c-8cad71d62719
-  position: {x: 109, y: 245}
+  position: {x: 121, y: 227}
   input: {fileID: -5138920021963573723}
   outputs: []
   children:
   - {fileID: 3788554011048648356}
   - {fileID: -7802308352495260695}
-  - {fileID: 0}
 --- !u!114 &-958467466668530538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +114,7 @@ MonoBehaviour:
   state: 2
   name: Action Patrol
   guid: f4503f4a-2430-4746-a320-2c87a0d1814f
-  position: {x: 621, y: 123}
+  position: {x: 592, y: 53.5}
   input: {fileID: 3788554011048648356}
   outputs: []
 --- !u!114 &11400000
@@ -146,7 +145,7 @@ MonoBehaviour:
   state: 2
   name: Patrol Cooldown
   guid: f1f7036a-39dc-4faf-87b4-d335fc4067ba
-  position: {x: 344, y: 160}
+  position: {x: 375, y: 156}
   input: {fileID: -1840887243055140662}
   outputs: []
   child: {fileID: -958467466668530538}
@@ -166,6 +165,6 @@ MonoBehaviour:
   state: 1
   name: IsDeath
   guid: f016d1f4-6855-4350-aec6-fc4f7ed7033c
-  position: {x: 273, y: -142}
+  position: {x: 273, y: -166.76}
   input: {fileID: -4414463533594173796}
   outputs: []
