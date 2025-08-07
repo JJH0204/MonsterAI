@@ -180,7 +180,7 @@ public class EdgeConnectorListenerWithPopup : IEdgeConnectorListener
     {
         var graphView = edge.GetFirstAncestorOfType<BTGraphView>();
         var pointerPos = graphView.contentViewContainer.WorldToLocal(position);
-        Debug.Log($"OnDropOutsidePort called. Screen Position: {position}, contentViewContainer 기준: {pointerPos}");
+        // Debug.Log($"OnDropOutsidePort called. Screen Position: {position}, contentViewContainer 기준: {pointerPos}");
         if (graphView != null)
         {
             BTNodeView targetNodeView = null;
@@ -191,7 +191,7 @@ public class EdgeConnectorListenerWithPopup : IEdgeConnectorListener
                 float width = nodeView.layout.width > 0 ? nodeView.layout.width : 200f;
                 float height = nodeView.layout.height > 0 ? nodeView.layout.height : 100f;
                 var nodeRect = new Rect(nodeView.Node.position, new Vector2(width, height));
-                Debug.Log($"Node: {nodeView.Node.name}, GUID: {nodeView.Node.guid}, position(contentViewContainer): {nodeView.Node.position}, nodeRect: {nodeRect}, layout: {nodeView.layout}");
+                // Debug.Log($"Node: {nodeView.Node.name}, GUID: {nodeView.Node.guid}, position(contentViewContainer): {nodeView.Node.position}, nodeRect: {nodeRect}, layout: {nodeView.layout}");
                 if (nodeRect.Contains(pointerPos))
                 {
                     float dist = Vector2.Distance(nodeRect.center, pointerPos);
@@ -204,7 +204,7 @@ public class EdgeConnectorListenerWithPopup : IEdgeConnectorListener
             }
             if (targetNodeView != null)
             {
-                Debug.Log($"Target node found: {targetNodeView.Node.name} (GUID: {targetNodeView.Node.guid})");
+                // Debug.Log($"Target node found: {targetNodeView.Node.name} (GUID: {targetNodeView.Node.guid})");
                 // // 이미 연결된 부모가 있으면 중복 연결 방지
                 // if (targetNodeView.Node.input == _nodeView.Node)
                 // {
@@ -225,7 +225,7 @@ public class EdgeConnectorListenerWithPopup : IEdgeConnectorListener
                         composite.children.Add(targetNodeView.Node);
                     }
                     targetNodeView.Node.input = _nodeView.Node;
-                    Debug.Log($"Added child to composite: {_nodeView.Node.name} -> {targetNodeView.Node.name}");
+                    // Debug.Log($"Added child to composite: {_nodeView.Node.name} -> {targetNodeView.Node.name}");
                 }
                 else if (_nodeView.Node is BTDecorator decorator)
                 {
@@ -233,22 +233,22 @@ public class EdgeConnectorListenerWithPopup : IEdgeConnectorListener
                     {
                         decorator.child = targetNodeView.Node;
                         targetNodeView.Node.input = _nodeView.Node;
-                        Debug.Log($"Set decorator child: {_nodeView.Node.name} -> {targetNodeView.Node.name}");
+                        // Debug.Log($"Set decorator child: {_nodeView.Node.name} -> {targetNodeView.Node.name}");
                     }
                 }
                 UnityEditor.EditorUtility.SetDirty(_nodeView.Node);
                 UnityEditor.EditorUtility.SetDirty(targetNodeView.Node);
                 UnityEditor.AssetDatabase.SaveAssets();
                 graphView.RedrawTree();
-                Debug.Log("RedrawTree called.");
+                // Debug.Log("RedrawTree called.");
                 return;
             }
             else
             {
-                Debug.LogWarning("No target node found at drop position.");
+                // Debug.LogWarning("No target node found at drop position.");
                 // 빈 공간에 드롭 시 노드 생성 팝업 표시
                 graphView.ShowNodeCreatePopup(_nodeView, _portIndex, position);
-                Debug.Log("ShowNodeCreatePopup called.");
+                // Debug.Log("ShowNodeCreatePopup called.");
             }
             graphView.RemoveElement(edge);
         }

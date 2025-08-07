@@ -128,19 +128,33 @@ public class BTNodeSettingsPopupWindow : VisualElement
             });
             Add(childField);
             
-            // 타입별 특수 필드 UI 정의 예시
-            // if (decorator is BTRepeatDecorator repeat)
-            // {
-            //     var countField = new IntegerField("반복 횟수") { value = repeat.count };
-            //     countField.RegisterValueChangedCallback(evt => {
-            //         repeat.count = evt.newValue;
-            //         EditorUtility.SetDirty(repeat);
-            //         AssetDatabase.SaveAssets();
-            //     });
-            //     Add(countField);
-            // }
             // TODO: 아래에 다른 Decorator 타입에 대한 필드 추가 가능
             
+            // 쿨타임 데코레이터
+            if (decorator is BTCooldown cooldown)
+            {
+                var timeField = new FloatField("Cooldown Time") { value = cooldown.cooldownTime };
+                timeField.RegisterValueChangedCallback(evt =>
+                {
+                    cooldown.cooldownTime = evt.newValue;
+                    EditorUtility.SetDirty(cooldown);
+                    AssetDatabase.SaveAssets();
+                });
+                Add(timeField);
+            }
+            
+            // 딜레이 타임 데코레이터
+            if (decorator is BTDelay delay)
+            {
+                var timeField = new FloatField("Delay Time") { value = delay.delayTime };
+                timeField.RegisterValueChangedCallback(evt =>
+                {
+                    delay.delayTime = evt.newValue;
+                    EditorUtility.SetDirty(delay);
+                    AssetDatabase.SaveAssets();
+                });
+                Add(timeField);
+            }
         }
     }
 }

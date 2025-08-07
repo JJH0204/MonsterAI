@@ -11,7 +11,6 @@ namespace AI.BehaviorTree
     public class BehaviorTree : ScriptableObject
     {
         public BTNode rootNode;
-        // public MonsterStats blackboard;
 
         public void Init()
         {
@@ -27,7 +26,7 @@ namespace AI.BehaviorTree
             {
                 if (string.IsNullOrEmpty(node.guid))
                 {
-                    node.guid = System.Guid.NewGuid().ToString();
+                    node.guid = Guid.NewGuid().ToString();
                     Debug.LogWarning($"[BehaviorTree] Fixed missing GUID for node: {node.name}");
                 }
             }
@@ -41,7 +40,7 @@ namespace AI.BehaviorTree
             return rootNode?.Evaluate(monsterStats, visited) ?? NodeState.Failure;
         }
         
-        public List<BTNode> GetAllNodes()
+        private List<BTNode> GetAllNodes()
         {
             var nodes = new List<BTNode>();
             CollectNodes(rootNode, nodes);
@@ -91,8 +90,8 @@ namespace AI.BehaviorTree
         // 트리 에셋에 포함된 모든 BTNode 반환
         public List<BTNode> GetAllAssetNodes()
         {
-            var assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
-            var assets = UnityEditor.AssetDatabase.LoadAllAssetsAtPath(assetPath);
+            var assetPath = AssetDatabase.GetAssetPath(this);
+            var assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
             var nodes = new List<BTNode>();
             foreach (var asset in assets)
             {
