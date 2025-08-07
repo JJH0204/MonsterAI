@@ -17,7 +17,6 @@ public class BTNodeSettingsPopupWindow : VisualElement
     public BTNodeSettingsPopupWindow()
     {
         AddToClassList("settings-popup");
-        
     }
 
     public void SetTargetNode(BTNode node, BTGraphView graphView)

@@ -470,7 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e596d8cb3be1748b90d7d7ae18652a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: 420e2f0528a984c49a45b1b2a965326d, type: 2}
+  tree: {fileID: 11400000, guid: 7cf8684639e1dfe409cd72a4c6909029, type: 2}
   monsterStats: {fileID: 736042795}
 --- !u!65 &736042789
 BoxCollider:
