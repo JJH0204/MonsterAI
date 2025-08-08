@@ -1,8 +1,8 @@
 # MonsterAI
 
 ## 개요
-![alt text](image-2.png)
-![alt text](image-1.png)
+![alt text](Images/image-2.png)
+![alt text](Images/image-1.png)
 MonsterAI는 유니티 게임 개발에 사용할 수 있는 Behavior Tree 기반 AI 시스템과 트리 구축을 편리하게 해주는 그래프 뷰 에디터를 제공합니다.
 
 ## 주요 기능
@@ -30,19 +30,19 @@ MonsterAI는 유니티 게임 개발에 사용할 수 있는 Behavior Tree 기�
 
 ### 노드 종류
 #### 1. Composite
-![alt text](image-3.png)
+![alt text](Images/image-3.png)
 - 여러 자식 노드를 가지며, 조건에 따라 실행 순서를 결정 (예: Selector, Sequence)
 - 시퀀스 노드는 자식 노드를 순차적으로 실행하고, 하나라도 실패하면 실패로 간주
 - 셀랙트 노드는 자식 노드 중 하나라도 성공하면 성공으로 간주
 - Output 노드를 여러 개 연결 할 수 있습니다.
 
 #### 2. Decorator
-![alt text](image-4.png)
+![alt text](Images/image-4.png)
 - 자식 노드의 실행 결과를 수정하거나 조건을 추가 (예: Inverter, Repeater)
 - Input과 Output 노드가 하나씩 존재
 
 #### 3. Leaf
-![alt text](image-5.png)
+![alt text](Images/image-5.png)
 - 실제 행동을 수행하는 노드 (예: Action[노랑], Condition[초록])
 - Input 노드만 존재
 - 프로젝트의 성격에 따라 Action 노드와 Condition 노드를 구현하여 사용합니다.
