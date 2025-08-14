@@ -4,15 +4,14 @@ using UnityEngine;
 namespace AI.BehaviorTree.Nodes
 {
     // 자식 노드의 실행 결과를 반대로 뒤집는다.
-    [CreateAssetMenu(menuName = "BehaviorTree/Decorator/Inverter")]
     public class BTInverter : BTDecorator
     {
-        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
+        public override NodeState Evaluate(NodeContext context, HashSet<BTNode> visited)
         {
             if (CheckCycle(visited))
                 return NodeState.Failure;
             
-            var nodeState = child.Evaluate(monsterStats, visited);
+            var nodeState = child.Evaluate(context, visited);
             
             if (nodeState == NodeState.Failure)
                 state = NodeState.Success;

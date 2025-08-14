@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-// using AI.BehaviorTree.EditorExtensions;
 using AI.BehaviorTree.Nodes;
 using UnityEditor;
 using UnityEngine;
 
 namespace AI.BehaviorTree
 {
-    [CreateAssetMenu(menuName = "BehaviorTree/Tree")]
+    [CreateAssetMenu(menuName = "BehaviorTree/New Tree")]
     public class BehaviorTree : ScriptableObject
     {
         public BTNode rootNode;
@@ -34,10 +33,10 @@ namespace AI.BehaviorTree
             rootNode?.OnValidateNode();
         }
 
-        public NodeState Tick(MonsterStats monsterStats)
+        public NodeState Tick(NodeContext context)
         {
             var visited = new HashSet<BTNode>();
-            return rootNode?.Evaluate(monsterStats, visited) ?? NodeState.Failure;
+            return rootNode?.Evaluate(context, visited) ?? NodeState.Failure;
         }
         
         private List<BTNode> GetAllNodes()
@@ -76,17 +75,7 @@ namespace AI.BehaviorTree
             AssetDatabase.SaveAssets();
             Debug.Log("[BehaviorTree] 루트 노드가 자동 생성되었습니다.");
         }
-
-        public BTNode GetNodeByGuid(string guid)
-        {
-            foreach (var node in GetAllNodes())
-            {
-                if (node != null && node.guid == guid)
-                    return node;
-            }
-            return null;
-        }
-
+        
         // 트리 에셋에 포함된 모든 BTNode 반환
         public List<BTNode> GetAllAssetNodes()
         {

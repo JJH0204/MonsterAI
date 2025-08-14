@@ -44,7 +44,7 @@ namespace AI.BehaviorTree.Nodes
         public virtual void OnExit() { }
         public virtual void Reset() { }
         
-        public abstract NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited);
+        public abstract NodeState Evaluate(NodeContext context, HashSet<BTNode> visited);
         public virtual void OnValidateNode() { }
         
         // 순환 참조 발생을 점검하고 결과 반환하는 함수

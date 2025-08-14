@@ -2,12 +2,12 @@
 
 namespace AI.BehaviorTree.Nodes
 {
-    [CreateAssetMenu(menuName = "BehaviorTree/Condition/IsTargetAlive")]
     public class BTIsTargetAlive : BTCondition
     {
-        protected override bool CheckCondition(MonsterStats monsterStats)
+        protected override bool CheckCondition(NodeContext context)
         {
-            var target = monsterStats.Target;
+            var blackboard = context.Blackboard;
+            var target = blackboard.Target;
             return target is not null;
             
             // TODO: 실제 사용 시 target이 살아있는지 확인하는 로직 추가 필요

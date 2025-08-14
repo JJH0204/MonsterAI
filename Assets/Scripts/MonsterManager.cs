@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-// using Jaeho.Monster;
+using AI.Blackboard;
 using UnityEngine;
+using Monster;
 
 public class MonsterManager: ManagerBase<MonsterManager>
 {
@@ -41,10 +42,10 @@ public class MonsterManager: ManagerBase<MonsterManager>
             if (otherMonster == monster || !(Vector3.Distance(standardPosition, otherPosition) <= distance)) continue;
             
             // 몬스터의 상태가 전투와 관련된 상태인 경우 (Chase, Attack 등)
-            var monsterStats = otherMonster.GetComponent<MonsterStats>();
-            if (monsterStats == null) continue;
-            if (monsterStats.State != MonsterState.Chase && monsterStats.State != MonsterState.Attack &&
-                monsterStats.State != MonsterState.Hit) continue;
+            var blackboard = otherMonster.GetComponent<Blackboard>();
+            if (blackboard == null) continue;
+            if (blackboard.State != MonsterState.Chase && blackboard.State != MonsterState.Attack &&
+                blackboard.State != MonsterState.Hit) continue;
             return true; // 근처에 전투 중인 몬스터가 있음
         }
         return false; // 근처에 전투 중인 몬스터가 없음

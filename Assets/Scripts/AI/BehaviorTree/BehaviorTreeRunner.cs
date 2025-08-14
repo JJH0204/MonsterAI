@@ -1,28 +1,30 @@
+using System;
 using System.Collections;
+using AI.BehaviorTree.Nodes;
+using AI.Command;
+using Blackboard = AI.Blackboard;
+using Monster;
 using UnityEngine;
 
 namespace AI.BehaviorTree
 {
+    public readonly struct NodeContext
+    {
+        public readonly Blackboard.Blackboard Blackboard;
+        public readonly Action<AICommand> Enqueue;
+        
+        public NodeContext(Blackboard.Blackboard blackboard, Action<AICommand> enqueue)
+        {
+            Blackboard = blackboard;
+            Enqueue = enqueue;
+        }
+    }
+    
     public class BehaviorTreeRunner : MonoBehaviour
     {
         [SerializeField] private BehaviorTree tree;
-        [SerializeField] private MonsterStats monsterStats;
-        
+        [SerializeField] private AIController aiController;
         private void Start() => tree?.Init();
-        private void Update()
-        {
-            // StartCoroutine(TickDelay());
-            tree?.Tick(monsterStats);
-        }
-        
-        public BehaviorTree Tree => tree;
-        public MonsterStats MonsterStats => monsterStats;
-
-        // private IEnumerator TickDelay()
-        // {
-        //     // yield return new WaitForEndOfFrame();
-        //     yield return new WaitForSeconds(0.1f);
-        //     tree?.Tick(monsterStats);
-        // }
+        private void Update() => tree?.Tick(new NodeContext(aiController.Blackboard, c => aiController.EnqueueCommand(c)));
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace AI.BehaviorTree.Nodes
 {
-    [CreateAssetMenu(menuName = "BehaviorTree/Composite/Sequence")]
     // 모든 자식 노드를 순차적으로 실행하고,
     // 모든 자식 노드가 성공하면 성공 상태를 반환한다.
     // 하나라도 실패하면 실패 상태를 반환한다.
@@ -11,14 +10,14 @@ namespace AI.BehaviorTree.Nodes
     // 이 노드는 일반적으로 여러 행동을 순차적으로 실행할 때 사용한다.
     public class BTSequence: BTComposite
     {
-        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
+        public override NodeState Evaluate(NodeContext context, HashSet<BTNode> visited)
         {
             if (CheckCycle(visited))
                 return NodeState.Failure;
             
             foreach (var child in children)
             {
-                var childState = child.Evaluate(monsterStats, visited);
+                var childState = child.Evaluate(context, visited);
                 if (childState == NodeState.Failure)
                 {
                     state = NodeState.Failure;

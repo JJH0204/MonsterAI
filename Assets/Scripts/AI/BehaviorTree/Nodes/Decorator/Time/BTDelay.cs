@@ -4,7 +4,6 @@ using UnityEngine;
 namespace AI.BehaviorTree.Nodes
 {
     // 지정된 시간 후에 자식 노드를 실행하는 노드
-    [CreateAssetMenu(menuName = "BehaviorTree/Decorator/Delay")]
     public class BTDelay : BTDecorator
     {
         public float delayTime;
@@ -19,7 +18,7 @@ namespace AI.BehaviorTree.Nodes
             _isDelaying = true;
         }
         
-        public override NodeState Evaluate(MonsterStats monsterStats, HashSet<BTNode> visited)
+        public override NodeState Evaluate(NodeContext context, HashSet<BTNode> visited)
         {
             if (CheckCycle(visited))
                 return NodeState.Failure;
@@ -41,7 +40,7 @@ namespace AI.BehaviorTree.Nodes
             if (child is null)
                 return NodeState.Success;
             
-            return state = child.Evaluate(monsterStats, visited);
+            return state = child.Evaluate(context, visited);
         }
     }
 }
