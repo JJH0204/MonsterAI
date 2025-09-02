@@ -33,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5108314927602997760}
   m_Father: {fileID: 3235722916767231628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7661006402871576620
@@ -132,7 +133,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!195 &6544767964886789777
 NavMeshAgent:
@@ -165,8 +166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3235722916767231628}
-  - component: {fileID: 1145764440979232643}
-  - component: {fileID: 6081599545822989982}
+  - component: {fileID: 5719312097654158085}
   m_Layer: 0
   m_Name: MonsterA
   m_TagString: Untagged
@@ -191,7 +191,7 @@ Transform:
   - {fileID: 8217320455735917532}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1145764440979232643
+--- !u!114 &5719312097654158085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,24 +200,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 1292388438603544177}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a9af89a3855492791d1dfee711fc65a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2747dd77576034cd286bd499a8cae007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackboard: {fileID: 2012745755202891609}
---- !u!114 &6081599545822989982
-MonoBehaviour:
+  blackboard: {fileID: 8588214114248544555}
+  tree: {fileID: 11400000, guid: 31a2a99b40d704b4e9eff9aa53090afd, type: 2}
+--- !u!1 &7828510622182844379
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292388438603544177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2e596d8cb3be1748b90d7d7ae18652a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: 21a951a38a2ef874d846e4581463a988, type: 2}
-  aiController: {fileID: 1145764440979232643}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5108314927602997760}
+  m_Layer: 0
+  m_Name: ShotPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5108314927602997760
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7828510622182844379}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.731}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1359592592954266297}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8563480837061051896
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8217320455735917532}
-  - component: {fileID: 2012745755202891609}
+  - component: {fileID: 8588214114248544555}
   m_Layer: 0
   m_Name: Blackboard
   m_TagString: Untagged
@@ -250,7 +268,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3235722916767231628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2012745755202891609
+--- !u!114 &8588214114248544555
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -259,32 +277,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 8563480837061051896}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a6706afd624d40902cccf03950f697, type: 3}
+  m_Script: {fileID: 11500000, guid: e2c89e2618e864ded9e0c66fd258c7e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   state: 1
+  id: 1002
   navMeshAgent: {fileID: 6544767964886789777}
   agent: {fileID: 701639474520099993}
+  animator: {fileID: 0}
   target: {fileID: 0}
-  defaultStats: {fileID: 11400000, guid: 298a93e9440d840308321dd4ae934eda, type: 2}
+  deathEffect: {fileID: 0}
   patrolInfo:
-    minPatrolTime: 2
-    maxPatrolTime: 5
+    minPatrolTime: 1
+    maxPatrolTime: 3
     wayPoints:
-    - {x: -10, y: 0, z: 0}
-    - {x: 10, y: 0, z: 0}
-    - {x: 0, y: 0, z: 10}
-    - {x: 0, y: 0, z: -10}
-    startPatrolTime: 0
-    currentPatrolTime: 0
-    isPatrolling: 0
-    currentWayPointIndex: 0
+    - {x: 5, y: 0, z: 0}
+    - {x: 5, y: 0, z: 5}
+    - {x: 0, y: 0, z: 5}
+    - {x: 0, y: 0, z: -5}
+    - {x: 5, y: 0, z: -5}
+    - {x: -5, y: 0, z: -5}
+    - {x: -5, y: 0, z: 5}
+    - {x: -5, y: 0, z: 0}
   wanderInfo:
-    minWanderTime: 2
-    maxWanderTime: 5
-    wanderAreaCenter: {x: -7.86, y: 0, z: 0}
-    wanderAreaRadius: 15
-    currentWanderPoint: {x: 0, y: 0, z: 0}
-    currentWanderTime: 0
-    startWanderTime: 0
-    isWandering: 0
+    minWanderTime: 0
+    maxWanderTime: 0
+    wanderAreaCenter: {x: 0, y: 0, z: 0}
+    wanderAreaRadius: 0
+  attackInfo:
+    bulletPrefab: {fileID: 914363595772914150, guid: a3ba8d7c3b7c34eaf8f1d979a0319c54, type: 3}
+    firePoint: {fileID: 5108314927602997760}

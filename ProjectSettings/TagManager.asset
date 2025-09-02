@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Bullet
+  - Wall
+  - Obstacle
+  - Breakable
   layers:
   - Default
   - TransparentFX
