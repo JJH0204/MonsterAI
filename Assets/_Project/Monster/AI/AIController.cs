@@ -98,7 +98,6 @@ namespace Monster.AI
             {
                 // Gizmos의 색상을 설정
                 Gizmos.color = Color.red;
-                // TODO: 
                 Gizmos.DrawWireSphere(blackboard.Agent.transform.position, blackboard.CharData.maxDetectiveRange);
             }
 
