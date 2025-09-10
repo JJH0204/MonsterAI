@@ -6,10 +6,7 @@ namespace Monster.AI.Command
 {
     public class AttackCommand : AICommand
     {
-        // public static Coroutine coroutine;
-        // private static bool _isAttacking;
-        // private RowData _skillRowData;
-        private SkillData _skillRowData;
+        private readonly SkillData _skillRowData;
 
         public AttackCommand(SkillData skillRowData)
         {
@@ -46,10 +43,11 @@ namespace Monster.AI.Command
         public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
         {
             if (!CheckBlackboard(blackboard)) yield break;
-            if (blackboard.State == MonsterState.Attack || _skillRowData == null) yield break;
+            if (blackboard.Action.HasAction(EAction.Attacking) || _skillRowData == null) yield break;
             
             // _isAttacking = true;
-            blackboard.State = MonsterState.Attack;
+            // blackboard.State = MonsterState.Attack;
+            blackboard.Action.AddAction(EAction.Attacking);
             
             // int skillID = (int)_skillRowData.Stats[EStatType.ID].value;
             // float coolTime = _skillRowData.Stats[EStatType.CooldownTime].value;
@@ -160,7 +158,8 @@ namespace Monster.AI.Command
             
             // 코루틴 실행 상태 초기화
             // _isAttacking = false;
-            blackboard.State = MonsterState.Idle;
+            // blackboard.State = MonsterState.Idle;
+            blackboard.Action.RemoveAction(EAction.Attacking);
 
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();
@@ -172,7 +171,7 @@ namespace Monster.AI.Command
             Debug.Log("Firing bullet at target!");
             // 예: Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             
-            var startPos = blackboard.AttackInfo.firePoint.position;
+            // var startPos = blackboard.AttackInfo.firePoint.position;
             // var targetPos = blackboard.Target.transform.position + Vector3.up * 1.5f; // 타겟의 중심을 향하도록 약간 위로 조정
             // var direction = (targetPos - startPos).normalized;
             

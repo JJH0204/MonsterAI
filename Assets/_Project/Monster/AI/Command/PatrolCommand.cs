@@ -7,7 +7,10 @@ namespace Monster.AI.Command
 {
     public class PatrolCommand : AICommand
     {
+        private static readonly int Run = Animator.StringToHash("Run");
+
         // private static bool _animationRunning;
+        // private static bool _isPatrol;
         private static bool CheckBlackboard(Blackboard.Blackboard blackboard)
         {
             if (blackboard is null)
@@ -42,15 +45,21 @@ namespace Monster.AI.Command
         {
             if (!CheckBlackboard(blackboard)) yield break;
             
+            Debug.Log($"Executing Patrol Command: {blackboard.State}.");
             // Patrol 상태 처리
-            if (blackboard.State == MonsterState.Patrol)
+            // if (blackboard.Action.HasState(EState.Patrol))
+            if (blackboard.Action.HasAction(EAction.Patrolling))
             {
                 // 현재 Patrol 시간이 초과되었는지 확인
                 if (Time.time - blackboard.PatrolInfo.StartPatrolTime >= blackboard.PatrolInfo.CurrentPatrolTime)
                 {
                     // blackboard.PatrolInfo.IsPatrolling = false;
                     // Debug.Log("Patrol time exceeded. Stopping patrolling.");
-                    blackboard.State = MonsterState.Idle;
+                    // blackboard.State = MonsterState.Idle;
+                    // _isPatrol = false;
+                    // blackboard.Action.RemoveState(EState.Patrol);
+                    blackboard.Action.RemoveAction(EAction.Patrolling);
+                    blackboard.NavMeshAgent.isStopped = true; // 이동을 멈춤
                 }
                 else
                 {
@@ -70,7 +79,10 @@ namespace Monster.AI.Command
             else
             {
                 // blackboard.PatrolInfo.IsPatrolling = true;
-                blackboard.State = MonsterState.Patrol;
+                // blackboard.State = MonsterState.Patrol;
+                // _isPatrol = true;
+                // blackboard.Action.AddState(EState.Patrol);
+                blackboard.Action.AddAction(EAction.Patrolling);
                 blackboard.PatrolInfo.StartPatrolTime = Time.time;
                 blackboard.PatrolInfo.CurrentPatrolTime = blackboard.PatrolInfo.GetRandomPatrolTime();
                 blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
@@ -88,7 +100,7 @@ namespace Monster.AI.Command
             if (CheckAnimator(blackboard, "Run"))
             {
                 // _animationRunning = true;
-                blackboard.Animator.SetTrigger("Run");
+                blackboard.Animator.SetTrigger(Run);
             }
             
             // 명령어 완료 콜백 호출

@@ -24,11 +24,9 @@ namespace Monster.AI.BehaviorTree
             var allNodes = GetAllNodes();
             foreach (var node in allNodes)
             {
-                if (string.IsNullOrEmpty(node.guid))
-                {
-                    node.guid = Guid.NewGuid().ToString();
-                    Debug.LogWarning($"[BehaviorTree] Fixed missing GUID for node: {node.name}");
-                }
+                if (!string.IsNullOrEmpty(node.guid)) continue;
+                node.guid = Guid.NewGuid().ToString();
+                Debug.LogWarning($"[BehaviorTree] Fixed missing GUID for node: {node.name}");
             }
 
             rootNode?.OnValidateNode();

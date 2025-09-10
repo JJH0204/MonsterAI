@@ -1,8 +1,6 @@
-using Monster;
 using Monster.AI;
 using Monster.AI.Blackboard;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 namespace Managers
@@ -30,7 +28,10 @@ namespace Managers
             foreach (GameObject monster in monsters)
             {
                 Blackboard blackboard = monster?.GetComponentInChildren<Blackboard>();
-                if (blackboard?.State is MonsterState.Chase or MonsterState.Attack or MonsterState.Hit)
+                // if (blackboard?.State is MonsterState.Chase or MonsterState.Attack or MonsterState.Hit)
+                if (blackboard?.State.HasState(2) == true ||
+                    blackboard?.State.HasState(3) == true ||
+                    blackboard?.State.HasState(4) == true)
                 {
                     battleMonsters.Add(monster);
                 }
@@ -57,7 +58,8 @@ namespace Managers
                 Blackboard blackboard = aiController.Blackboard;
                 if (blackboard is null) continue;
 
-                if (blackboard.State != MonsterState.Death) continue;
+                // if (blackboard.State != MonsterState.Death) continue;
+                if (!blackboard.State.HasState(5)) continue;
 
                 monsters.Remove(monster);
                 Destroy(monster);

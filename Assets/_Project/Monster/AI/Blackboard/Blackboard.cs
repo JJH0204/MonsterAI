@@ -10,7 +10,9 @@ namespace Monster.AI.Blackboard
     {
         #region SerializeFields
         
-        [Tooltip("몬스터의 현재 상태를 나타냅니다.")][SerializeField] private MonsterState state = MonsterState.Idle;
+        [Tooltip("몬스터의 현재 상태를 나타냅니다.")]
+        [SerializeField] private MonsterState state;
+        [SerializeField] private MonsterAction action; // 현재 행동 상태 (공격, 스킬 사용 등)
         [SerializeField] private int id;
         
         [Header("Dependency")] // 의존성 주입
@@ -42,6 +44,12 @@ namespace Monster.AI.Blackboard
         {
             get => state;
             set => state = value;
+        }
+        
+        public MonsterAction Action
+        {
+            get => action;
+            set => action = value;
         }
         
         public NavMeshAgent NavMeshAgent
@@ -133,25 +141,11 @@ namespace Monster.AI.Blackboard
         }
 
         #endregion
-
-        #region Dictionary
-
-        // private readonly Dictionary<string, object> _map = new();
-        // public void Set<T>(BBKey<T> key, T value) => _map[key.Name] = value;
-        //
-        // public bool TryGet<T>(BBKey<T> key, out T value)
-        // {
-        //     if (_map.TryGetValue(key.Name, out var obj) && obj is T t) 
-        //     { 
-        //         value = t;
-        //         return true;
-        //     }
-        //
-        //     value = default!;
-        //     return false;
-        // }
-        //
-        // public Dictionary<int, RowData> Skills { get; } = new();
+        
+        #region Boolean Properties
+        
+        public bool IsAlive => CurrentHealth > 0f;
+        public bool HasTarget => Target != null;
 
         #endregion
 
@@ -169,19 +163,6 @@ namespace Monster.AI.Blackboard
                 Debug.Log("Default stats not found for id: " + id);
                 return;
             }
-            // Debug.Log(defaultStats.ToString()); // 디버그용: 기본 스탯 데이터 확인
-            
-            // 몬스터 스탯 초기화
-            // {
-            //     _map["health"] = defaultStats.GetStat(EStatType.MaxHp);                  // AI의 현재 체력
-            //     _map["maxHealth"] = defaultStats.GetStat(EStatType.MaxHp);
-            //     _map["runSpeed"] = defaultStats.GetStat(EStatType.WalkSpeed);                // 걷기 이동 속도
-            //     _map["walkSpeed"] = defaultStats.GetStat(EStatType.RunSpeed);                  // 뛰기 이동 속도
-            //     _map["damage"] = defaultStats.GetStat(EStatType.Damage);                   // 공격력
-            //     _map["defence"] = defaultStats.GetStat(EStatType.Defence);                   // 방어력
-            //     _map["minDetectionRange"] = defaultStats.GetStat(EStatType.MinDetectiveRange);          // 타겟 인식 범위 (최소)
-            //     _map["maxDetectionRange"] = defaultStats.GetStat(EStatType.MaxDetectiveRange);           // 타겟 인식 범위
-            // }
             
             // 몬스터 스탯 초기화
             {
@@ -227,15 +208,15 @@ namespace Monster.AI.Blackboard
             _charData = null;
             _skills?.Clear();
             Target = null;
-            State = MonsterState.Idle;
+            State.ClearStates();
             CleanUpCooldownList();
         }
 
-        public SkillData GetSkillDataByID(int id)
+        public SkillData GetSkillDataByID(int index)
         {
             foreach (SkillData skillData in _skills)
             {
-                if (skillData.id == id)
+                if (skillData.id == index)
                     return skillData;
             }
             return null;

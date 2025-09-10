@@ -1,5 +1,4 @@
 using Managers;
-using Monster.AI.Blackboard;
 using Monster.AI.Command;
 using Script.CustomCollections;
 using System;
@@ -19,10 +18,20 @@ namespace Monster.AI
         }
     }
     
+    [Serializable]
+    public struct BTData
+    {
+        // public EState state;
+        public string stateName;
+        public BehaviorTree.BehaviorTree behaviorTree;
+    }
+    
     public sealed class AIController : MonoBehaviour
     {
         [SerializeField] private Blackboard.Blackboard blackboard;
-        [SerializeField] private BehaviorTree.BehaviorTree tree;
+        // [SerializeField] private BehaviorTree.BehaviorTree tree;
+        [SerializeField] private BehaviorTree.BehaviorTree globalBehaviorTree;
+        [SerializeField] private BTData[] data;
         
         /// <summary>
         /// <para>AICommandQueue를 구현하여 AI 명령어를 큐에 저장하고 처리</para>
@@ -32,7 +41,7 @@ namespace Monster.AI
         
         private int _currentPriority = -999; // 현재 실행 중인 명령어의 우선순위(초기값은 매우 낮게 설정)
         
-        private bool _isInit = false;
+        private bool _isInit;
         
         public Blackboard.Blackboard Blackboard => blackboard;
 
@@ -66,7 +75,12 @@ namespace Monster.AI
             Init();
         }
         
-        private void Start() => tree?.Init();
+        // private void Start() => tree?.Init();
+        // private void Start()
+        // {
+        //     var state = data;
+        // }
+        
         
         // Blackboard의 상태를 매 프레임마다 업데이트할 필요가 있을 경우 사용
         private void Update()
@@ -87,14 +101,9 @@ namespace Monster.AI
         private void OnDrawGizmos()
         {
             if (blackboard is null) return;
-            // #if UNITY_EDITOR
-            // blackboard.InitMonsterStatsByID();
-            // #endif
-            // 몬스터의 위치를 기준으로 인식 범위를 원으로 표시
-            // if (blackboard.Agent is not null && blackboard.TryGet(new BBKey<float>("maxDetectionRange"), out var detectionRange) && detectionRange > 0f)
+            
             if (blackboard.Agent is not null &&
-                blackboard.CharData != null &&
-                blackboard.CharData.maxDetectiveRange > 0f)
+                blackboard.CharData is { maxDetectiveRange: > 0f })
             {
                 // Gizmos의 색상을 설정
                 Gizmos.color = Color.red;
@@ -105,8 +114,7 @@ namespace Monster.AI
             //     blackboard.TryGet(new BBKey<float>("minDetectionRange"), out var detectionRange2) &&
                 // detectionRange2 > 0f)
             if (blackboard.Agent is not null &&
-                blackboard.CharData != null &&
-                blackboard.CharData.minDetectiveRange > 0f)
+                blackboard.CharData is { minDetectiveRange: > 0f })
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(blackboard.Agent.transform.position, blackboard.CharData.minDetectiveRange);
@@ -192,7 +200,18 @@ namespace Monster.AI
         private void Think()
         {
             // 블랙보드의 상태를 기반으로 행동 트리를 실행
-            tree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+            // tree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+            // Debug.Log("Thinking...");
+            globalBehaviorTree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+            Debug.Log($"{blackboard.State}");
+            
+            foreach (var btData in data)
+            {
+                if (!blackboard.State.HasState(btData.stateName)) continue;
+                // Debug.Log($"btData: {btData.State.ToString()}");
+                btData.behaviorTree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
+                break;
+            }
         }
         
         /// <summary>

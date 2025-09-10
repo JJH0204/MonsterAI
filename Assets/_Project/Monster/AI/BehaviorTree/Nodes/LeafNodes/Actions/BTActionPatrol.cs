@@ -13,6 +13,7 @@ namespace Monster.AI.BehaviorTree.Nodes
                 return NodeState.Failure;
             
             // patrol 명령을 행동 대기열에 추가
+            // Debug.Log("Patrol Command Enqueued");
             context.Enqueue(new PatrolCommand(), priority);
             
             return state = NodeState.Running;

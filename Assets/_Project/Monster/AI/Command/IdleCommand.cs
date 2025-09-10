@@ -1,4 +1,3 @@
-using Monster;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -15,7 +14,9 @@ namespace Monster.AI.Command
                 yield break;
             }
             // Idle 상태 처리
-            if (blackboard.State == MonsterState.Idle)
+            // if (blackboard.State == MonsterState.Idle)
+            // if (blackboard.Action.HasState(EState.Idle))
+            if (blackboard.Action.HasAction(EAction.Idle))
             {
                 Debug.Log("AI is already idle.");
                 yield break;
@@ -29,8 +30,10 @@ namespace Monster.AI.Command
             }
             
             // Idle 상태로 전환
-            blackboard.State = MonsterState.Idle;
+            // blackboard.State = MonsterState.Idle;
             // Debug.Log("AI is now idle.");
+            // blackboard.Action.AddState(EState.Idle);
+            blackboard.Action.AddAction(EAction.Idle);
             
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();

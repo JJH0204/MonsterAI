@@ -178,6 +178,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: globalBehaviorTree
+      value: 
+      objectReference: {fileID: 11400000, guid: b05dd41f4480d4b78aaa85c472d4f64f, type: 2}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[0].State
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[0].state
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[0].stateName
+      value: Patrol
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[1].stateName
+      value: Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[2].stateName
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[0].BehaviorTree
+      value: 
+      objectReference: {fileID: 11400000, guid: 9ca12cb62f6cd40af88f5e6b937d34d9, type: 2}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[0].behaviorTree
+      value: 
+      objectReference: {fileID: 11400000, guid: 9ca12cb62f6cd40af88f5e6b937d34d9, type: 2}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[1].behaviorTree
+      value: 
+      objectReference: {fileID: 11400000, guid: 1e4a9120bdf6244b5b6d54cfcaaaff69, type: 2}
+    - target: {fileID: 5719312097654158085, guid: f02cf3366ae3b4ebf9b9f671bb468ac2, type: 3}
+      propertyPath: data.Array.data[2].behaviorTree
+      value: 
+      objectReference: {fileID: 11400000, guid: 31a2a99b40d704b4e9eff9aa53090afd, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,4 +1,3 @@
-using Monster;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -7,6 +6,7 @@ namespace Monster.AI.Command
 {
     public class DeathCommand : AICommand
     {
+        private static readonly int Death = Animator.StringToHash("Death");
         private Collider _collider;
         private Rigidbody _rigidbody;
         
@@ -49,7 +49,8 @@ namespace Monster.AI.Command
         {
             if (!CheckBlackboard(blackboard)) yield break;
             
-            if (blackboard.State is MonsterState.Death) yield break;
+            // if (blackboard.State is MonsterState.Death) yield break;
+            if (blackboard.Action.HasAction(EAction.Dying)) yield break;
             
             // 죽음 상태 처리
             _collider.enabled = false;
@@ -66,7 +67,7 @@ namespace Monster.AI.Command
                 blackboard.Animator.Update(0f);
 
                 // Death 애니메이션 재생
-                blackboard.Animator.SetTrigger("Death");
+                blackboard.Animator.SetTrigger(Death);
                 yield return null;
 
                 AnimatorStateInfo animaState = blackboard.Animator.GetCurrentAnimatorStateInfo(0);
@@ -81,7 +82,8 @@ namespace Monster.AI.Command
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();
             
-            blackboard.State = MonsterState.Death;
+            // blackboard.State = MonsterState.Death;
+            blackboard.Action.AddAction(EAction.Dying);
         }
     }
 }

@@ -1,4 +1,3 @@
-using Monster.AI.Blackboard;
 using System.Collections;
 using System;
 using UnityEngine;
@@ -7,6 +6,8 @@ namespace Monster.AI.Command
 {
     public class WanderCommand : AICommand
     {
+        private static readonly int Run = Animator.StringToHash("Run");
+
         // private static bool _animationRunning;
         private static bool CheckBlackboard(Blackboard.Blackboard blackboard)
         {
@@ -38,40 +39,24 @@ namespace Monster.AI.Command
 
             return true;
         }
-        // private static bool CheckAnimator(Blackboard.Blackboard blackboard, string animationName)
-        // {
-        //     if (blackboard.Animator is null)
-        //     {
-        //         Debug.LogWarning("Animator is null. Cannot play Wander animation.");
-        //         return false;
-        //     }
-        //     if (!blackboard.Animator.HasState(0, Animator.StringToHash(animationName)))
-        //     {
-        //         Debug.LogWarning("Animator does not have a 'Walk' state. Please ensure the animation is set up correctly.");
-        //         return false;
-        //     }
-        //     // 현재 재생 중인 에니메이션이 animationName일 경우
-        //     if (blackboard.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
-        //     {
-        //         Debug.Log("Wander animation is already playing.");
-        //         return false;
-        //     }
-        //     return true;
-        // }
         
         public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
         {
             if (CheckBlackboard(blackboard)) yield break;
             
             // Wander 진행
-            if (blackboard.State is MonsterState.Wander)
+            // if (blackboard.State is MonsterState.Wander)
+            // if (blackboard.Action.HasState(EState.Wander))
+            if (blackboard.Action.HasAction(EAction.Wandering))
             {
                 // 현재 Wander 시간이 초과되었는지 확인
                 if (Time.time - blackboard.WanderInfo.StartWanderTime >= blackboard.WanderInfo.CurrentWanderTime)
                 {
                     // blackboard.WanderInfo.IsWandering = false;
                     // Debug.Log("Wander time exceeded. Stopping wandering.");
-                    blackboard.State = MonsterState.Idle;
+                    // blackboard.State = MonsterState.Idle;
+                    // blackboard.Action.RemoveState(EState.Wander);
+                    blackboard.Action.RemoveAction(EAction.Wandering);
                 }
                 else
                 {
@@ -89,7 +74,9 @@ namespace Monster.AI.Command
             else
             {
                 // Wander 상태로 전환
-                blackboard.State = MonsterState.Wander;
+                // blackboard.State = MonsterState.Wander;
+                // blackboard.Action.AddState(EState.Wander);
+                blackboard.Action.AddAction(EAction.Wandering);
                 Debug.Log("AI is now wander.");
                 
                 blackboard.WanderInfo.StartWanderTime = Time.time;
@@ -108,7 +95,7 @@ namespace Monster.AI.Command
             if (CheckAnimator(blackboard, "Run"))
             {
                 // _animationRunning = true;
-                blackboard.Animator.SetTrigger("Run");
+                blackboard.Animator.SetTrigger(Run);
             }
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();

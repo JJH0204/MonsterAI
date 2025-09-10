@@ -1,4 +1,3 @@
-using Monster.AI.Blackboard;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -7,6 +6,8 @@ namespace Monster.AI.Command
 {
     public class ChaseCommand : AICommand
     {
+        private static readonly int Run = Animator.StringToHash("Run");
+
         private static bool CheckBlackboard(Blackboard.Blackboard blackboard)
         {
             if (blackboard?.NavMeshAgent is null)
@@ -29,7 +30,8 @@ namespace Monster.AI.Command
             if (!CheckBlackboard(blackboard)) yield break;
             
             // Chase 상태 처리
-            if (blackboard.State is MonsterState.Chase)
+            // if (blackboard.State is MonsterState.Chase)
+            if (blackboard.Action.HasAction(EAction.Chaseing))
             {
                 // 이미 Chase 중인 경우, 타겟과 충분히 가까운지 확인
                 float distance = Vector3.Distance(blackboard.Agent.transform.position, blackboard.Target.transform.position);
@@ -53,7 +55,8 @@ namespace Monster.AI.Command
             else
             {
                 // Chase 상태로 전환
-                blackboard.State = MonsterState.Chase;
+                // blackboard.State = MonsterState.Chase;
+                blackboard.Action.AddAction(EAction.Chaseing);
                 // Debug.Log("AI is now Chase.");
                 // blackboard.NavMeshAgent.speed = blackboard.TryGet(new BBKey<float>("runSpeed"), out float speed) ? speed : 0;   // NavMesh Speed 설정
                 blackboard.NavMeshAgent.speed = blackboard.CharData.runSpeed;
@@ -64,7 +67,7 @@ namespace Monster.AI.Command
             // 이동 애니메이션 재생
             if (CheckAnimator(blackboard, "Run"))
             {
-                blackboard.Animator.SetTrigger("Run");
+                blackboard.Animator.SetTrigger(Run);
             }
             
             // 명령어 완료 콜백 호출
