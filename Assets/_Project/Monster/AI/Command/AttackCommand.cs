@@ -168,7 +168,7 @@ namespace Monster.AI.Command
         private void FireBullet(Blackboard.Blackboard blackboard)
         {
             // 총알 발사 로직 구현
-            Debug.Log("Firing bullet at target!");
+            // Debug.Log("Firing bullet at target!");
             // 예: Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             
             // var startPos = blackboard.AttackInfo.firePoint.position;

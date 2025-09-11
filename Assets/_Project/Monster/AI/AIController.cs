@@ -203,7 +203,7 @@ namespace Monster.AI
             // tree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
             // Debug.Log("Thinking...");
             globalBehaviorTree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
-            Debug.Log($"{blackboard.State}");
+            // Debug.Log($"{blackboard.State}");
             
             foreach (var btData in data)
             {

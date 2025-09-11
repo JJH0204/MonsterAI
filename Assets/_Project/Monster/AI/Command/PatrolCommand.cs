@@ -45,7 +45,7 @@ namespace Monster.AI.Command
         {
             if (!CheckBlackboard(blackboard)) yield break;
             
-            Debug.Log($"Executing Patrol Command: {blackboard.State}.");
+            // Debug.Log($"Executing Patrol Command: {blackboard.State}.");
             // Patrol 상태 처리
             // if (blackboard.Action.HasState(EState.Patrol))
             if (blackboard.Action.HasAction(EAction.Patrolling))
@@ -88,7 +88,7 @@ namespace Monster.AI.Command
                 blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
                 blackboard.NavMeshAgent.destination = blackboard.PatrolInfo.GetCurrentWayPoint();
                 blackboard.NavMeshAgent.isStopped = false; // 이동을 시작
-                Debug.Log("AI is now wandering to a new point.");
+                // Debug.Log("AI is now wandering to a new point.");
                 
                 // NavMesh Speed 설정
                 // blackboard.NavMeshAgent.speed = blackboard.TryGet(new BBKey<float>("walkSpeed"), out float speed) ? speed : 0;

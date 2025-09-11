@@ -34,12 +34,17 @@ namespace Monster.Data
         {
             // 기본 상태가 states에 없으면 추가, 기존 기본 상태는 수정 불가
             states ??= Array.Empty<StateDefinition>();
-            
-            // 기본 상태 이후에 중복되지 않은 사용자 정의 상태만 추가
+
+            // 사용자 정의 상태 추출 (기본 상태와 이름이 중복되지 않은 것만)
             var userStates = states
                 .Where(s => DefaultStates.All(d => d.stateName != s.stateName))
+                .Select((s, idx) => new StateDefinition {
+                    stateName = s.stateName,
+                    bitIndex = DefaultStates.Length + idx // 9부터 시작
+                })
                 .ToArray();
-            
+
+            // states 배열 재구성: 기본 상태 + 사용자 정의 상태
             states = new StateDefinition[DefaultStates.Length + userStates.Length];
             Array.Copy(DefaultStates, states, DefaultStates.Length);
             Array.Copy(userStates, 0, states, DefaultStates.Length, userStates.Length);

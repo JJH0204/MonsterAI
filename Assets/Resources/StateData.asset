@@ -31,3 +31,7 @@ MonoBehaviour:
     bitIndex: 7
   - stateName: Spawn
     bitIndex: 8
+  - stateName: Pase1
+    bitIndex: 9
+  - stateName: Pase2
+    bitIndex: 10
