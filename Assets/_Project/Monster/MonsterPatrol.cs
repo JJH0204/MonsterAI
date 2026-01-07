@@ -92,5 +92,16 @@ namespace Monster
         {
             return Random.Range(minPatrolTime, maxPatrolTime);
         }
+        
+        // 패트롤 지역에 도달했는지 여부
+        public bool IsDestinationReached(Vector3 currentPosition, float threshold = 0.5f)
+        {
+            if (wayPoints == null || wayPoints.Length == 0)
+                return false;
+
+            Vector3 targetPosition = wayPoints[_currentWayPointIndex];
+            float distance = Vector3.Distance(currentPosition, targetPosition);
+            return distance <= threshold;
+        }
     }
 }

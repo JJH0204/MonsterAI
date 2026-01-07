@@ -40,7 +40,7 @@ namespace Monster.AI
         private PriorityQueue<AICommand> _queue;
         
         private int _currentPriority = -999; // 현재 실행 중인 명령어의 우선순위(초기값은 매우 낮게 설정)
-        
+        private AICommand _currentCommand;
         private bool _isInit;
         
         public Blackboard.Blackboard Blackboard => blackboard;
@@ -210,7 +210,6 @@ namespace Monster.AI
                 if (!blackboard.State.HasState(btData.stateName)) continue;
                 // Debug.Log($"btData: {btData.State.ToString()}");
                 btData.behaviorTree?.Tick(new NodeContext(Blackboard, EnqueueCommand));
-                break;
             }
         }
         
@@ -221,26 +220,37 @@ namespace Monster.AI
         private void Act()
         {
             // 큐가 비어있으면 아무 것도 하지 않음
-            if (_queue.Count == 0) return;
-            
-            // if (blackboard.IsCoroutineRunning()) return;
-            
-            // 큐에 명령어가 있는 경우, 첫 번째 명령어를 처리
-            (AICommand command, int priority) = DequeueCommand();
-            // Debug.Log(command + $"{priority}");
+            // if (_currentCommand is not null && _currentCommand.State == AICommand.CommandState.Executing) return;
 
-            if (_currentPriority < priority)
+            if (_queue.Count > 0)
             {
-                _currentPriority = priority;    // 현재 우선순위를 업데이트(다른 명령어가 더 높은 우선순위를 가질 때만 업데이트)
+                // 큐에 명령어가 있는 경우, 첫 번째 명령어를 처리
+                (AICommand command, int priority) = DequeueCommand();
                 
-                // 명령어를 실행
-                StartCoroutine(command?.Execute(blackboard, () =>
+                // 명령어 실행 후 큐 청소
+                _queue.CleanUp();
+            
+                if (_currentPriority < priority)
                 {
-                    _currentPriority = -999;
-                }));
+                    _currentPriority = priority;    // 현재 우선순위를 업데이트(다른 명령어가 더 높은 우선순위를 가질 때만 업데이트)
+                    _currentCommand = command;
+                    _currentCommand.OnEnter(blackboard, () =>
+                    {
+                        _currentPriority = -999;
+                    });
+                }
             }
-            // 명령어 실행 후 큐 청소
-            _queue.CleanUp();
+            else
+            {
+                _currentCommand = null;
+                _currentPriority = -999; // 큐가 비어있으면 우선순위를 초기화
+            }
+            
+            _currentCommand?.Execute(blackboard, () =>
+            {
+                _currentCommand = null;
+                _currentPriority = -999;
+            });
         }
 
         #endregion

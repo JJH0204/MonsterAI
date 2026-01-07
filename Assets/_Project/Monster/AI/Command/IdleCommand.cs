@@ -6,37 +6,39 @@ namespace Monster.AI.Command
 {
     public class IdleCommand : AICommand
     {
-        public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        public override void OnEnter(Blackboard.Blackboard blackboard, Action onComplete = null)
         {
-            if (blackboard == null)
+            base.OnEnter(blackboard);
+            Debug.Log("IdleCommand OnEnter");
+            if (blackboard is null)
             {
                 Debug.LogError("Blackboard is null. Cannot execute IdleCommand.");
-                yield break;
-            }
-            // Idle 상태 처리
-            // if (blackboard.State == MonsterState.Idle)
-            // if (blackboard.Action.HasState(EState.Idle))
-            if (blackboard.Action.HasAction(EAction.Idle))
-            {
-                Debug.Log("AI is already idle.");
-                yield break;
+                OnExit(blackboard);
+                onComplete?.Invoke();
+                return;
             }
             // NavMeshAgent를 정지시키고, 이동을 중지
-            if (blackboard.NavMeshAgent != null)
+            if (blackboard.NavMeshAgent is not null)
             {
                 blackboard.NavMeshAgent.isStopped = true;
                 blackboard.NavMeshAgent.ResetPath();
                 Debug.Log("AI has stopped moving.");
             }
+        }
+
+        public override void Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        {
+            // Idle 상태 처리
             
-            // Idle 상태로 전환
-            // blackboard.State = MonsterState.Idle;
-            // Debug.Log("AI is now idle.");
-            // blackboard.Action.AddState(EState.Idle);
-            blackboard.Action.AddAction(EAction.Idle);
-            
+            OnExit(blackboard);
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();
+        }
+
+        public override void OnExit(Blackboard.Blackboard blackboard)
+        {
+            base.OnExit(blackboard);
+            Debug.Log("IdleCommand OnExit");
         }
     }
 }

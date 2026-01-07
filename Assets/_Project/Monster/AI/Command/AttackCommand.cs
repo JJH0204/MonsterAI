@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Monster.AI.Command
@@ -13,6 +12,7 @@ namespace Monster.AI.Command
             _skillRowData = skillRowData;
         }
         
+        // 블랙보드 유효성 검사
         private static bool CheckBlackboard(Blackboard.Blackboard blackboard)
         {
             if (blackboard is null)
@@ -40,14 +40,22 @@ namespace Monster.AI.Command
             return true;
         }
         
-        public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        public override void OnEnter(Blackboard.Blackboard blackboard, Action onComplete = null)
         {
-            if (!CheckBlackboard(blackboard)) yield break;
-            if (blackboard.Action.HasAction(EAction.Attacking) || _skillRowData == null) yield break;
+            base.OnEnter(blackboard, () => { });
+            // 공격 대상 바라보기
+            blackboard.Agent.transform.LookAt(blackboard.Target.transform);
+            Debug.Log("AttackCommand OnEnter");
+        }
+        
+        public override void Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        {
+            if (!CheckBlackboard(blackboard)) return;
+            if (_skillRowData == null) return;
             
             // _isAttacking = true;
             // blackboard.State = MonsterState.Attack;
-            blackboard.Action.AddAction(EAction.Attacking);
+            // blackboard.Action.AddAction(EAction.Attacking);
             
             // int skillID = (int)_skillRowData.Stats[EStatType.ID].value;
             // float coolTime = _skillRowData.Stats[EStatType.CooldownTime].value;
@@ -133,7 +141,7 @@ namespace Monster.AI.Command
                     }
                 case 4002:
                     {
-                        yield return new WaitForSeconds(0.5f); // 약간의 딜레이 후 시작
+                        // yield return new WaitForSeconds(0.5f); // 약간의 딜레이 후 시작
                         
                         // 기 모아서 연발 총알 발사
                         int bulletCount = 5; // 발사할 총알 수
@@ -144,7 +152,7 @@ namespace Monster.AI.Command
                             blackboard.Agent.transform.LookAt(blackboard.Target.transform);
                             
                             FireBullet(blackboard);
-                            yield return new WaitForSeconds(interval);
+                            // yield return new WaitForSeconds(interval);
                         }
                         break;
                     }
@@ -159,10 +167,22 @@ namespace Monster.AI.Command
             // 코루틴 실행 상태 초기화
             // _isAttacking = false;
             // blackboard.State = MonsterState.Idle;
-            blackboard.Action.RemoveAction(EAction.Attacking);
+            // blackboard.Action.RemoveAction(EAction.Attacking);
+            OnExit(blackboard);
 
             // 명령어 완료 콜백 호출
             onComplete?.Invoke();
+        }
+        
+        public override void OnExit(Blackboard.Blackboard blackboard)
+        {
+            base.OnExit(blackboard);
+            Debug.Log("AttackCommand OnExit");
+            // blackboard.State = MonsterState.Idle;
+            // blackboard.Action.RemoveAction(EAction.Attacking);
+            // Agent 움직임 재개
+            if (blackboard.NavMeshAgent != null)
+                blackboard.NavMeshAgent.isStopped = false;
         }
         
         private void FireBullet(Blackboard.Blackboard blackboard)

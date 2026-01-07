@@ -12,7 +12,7 @@ namespace Monster.AI.Blackboard
         
         [Tooltip("몬스터의 현재 상태를 나타냅니다.")]
         [SerializeField] private MonsterState state;
-        [SerializeField] private MonsterAction action; // 현재 행동 상태 (공격, 스킬 사용 등)
+        // [SerializeField] private MonsterAction action; // 현재 행동 상태 (공격, 스킬 사용 등)
         [SerializeField] private int id;
         
         [Header("Dependency")] // 의존성 주입
@@ -46,11 +46,11 @@ namespace Monster.AI.Blackboard
             set => state = value;
         }
         
-        public MonsterAction Action
-        {
-            get => action;
-            set => action = value;
-        }
+        // public MonsterAction Action
+        // {
+        //     get => action;
+        //     set => action = value;
+        // }
         
         public NavMeshAgent NavMeshAgent
         {
@@ -81,12 +81,6 @@ namespace Monster.AI.Blackboard
             get => deathEffect;
             set => deathEffect = value;
         }
-        
-        // public LayerMask ObstacleLayer
-        // {
-        //     get => obstacleLayer;
-        //     set => obstacleLayer = value;
-        // }
         
         public MonsterPatrol PatrolInfo
         {

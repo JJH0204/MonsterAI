@@ -41,59 +41,17 @@ namespace Monster.AI.Command
 
             return true;
         }
-        public override IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        
+        public override void OnEnter(Blackboard.Blackboard blackboard, Action onComplete = null)
         {
-            if (!CheckBlackboard(blackboard)) yield break;
+            base.OnEnter(blackboard, () => { });
+            Debug.Log("PatrolCommand OnEnter");
             
-            // Debug.Log($"Executing Patrol Command: {blackboard.State}.");
-            // Patrol 상태 처리
-            // if (blackboard.Action.HasState(EState.Patrol))
-            if (blackboard.Action.HasAction(EAction.Patrolling))
+            if (!CheckBlackboard(blackboard))
             {
-                // 현재 Patrol 시간이 초과되었는지 확인
-                if (Time.time - blackboard.PatrolInfo.StartPatrolTime >= blackboard.PatrolInfo.CurrentPatrolTime)
-                {
-                    // blackboard.PatrolInfo.IsPatrolling = false;
-                    // Debug.Log("Patrol time exceeded. Stopping patrolling.");
-                    // blackboard.State = MonsterState.Idle;
-                    // _isPatrol = false;
-                    // blackboard.Action.RemoveState(EState.Patrol);
-                    blackboard.Action.RemoveAction(EAction.Patrolling);
-                    blackboard.NavMeshAgent.isStopped = true; // 이동을 멈춤
-                }
-                else
-                {
-                    // 현재 Patrol 지점으로 이동 중
-                    if (blackboard.NavMeshAgent.remainingDistance <= blackboard.NavMeshAgent.stoppingDistance)
-                    {
-                        // Debug.Log("Reached current wander point. Continuing to wander.");
-                        // blackboard.PatrolInfo.IsPatrolling = false; // 현재 Patrol를 종료하고 새로운 Patrol를 시작
-                        
-                        // 다음 Patrol 지점으로 이동
-                        blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
-                        blackboard.NavMeshAgent.destination = blackboard.PatrolInfo.GetCurrentWayPoint();
-                        blackboard.NavMeshAgent.isStopped = false; // 이동을 시작
-                    }
-                }
-            }
-            else
-            {
-                // blackboard.PatrolInfo.IsPatrolling = true;
-                // blackboard.State = MonsterState.Patrol;
-                // _isPatrol = true;
-                // blackboard.Action.AddState(EState.Patrol);
-                blackboard.Action.AddAction(EAction.Patrolling);
-                blackboard.PatrolInfo.StartPatrolTime = Time.time;
-                blackboard.PatrolInfo.CurrentPatrolTime = blackboard.PatrolInfo.GetRandomPatrolTime();
-                blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
-                blackboard.NavMeshAgent.destination = blackboard.PatrolInfo.GetCurrentWayPoint();
-                blackboard.NavMeshAgent.isStopped = false; // 이동을 시작
-                // Debug.Log("AI is now wandering to a new point.");
-                
-                // NavMesh Speed 설정
-                // blackboard.NavMeshAgent.speed = blackboard.TryGet(new BBKey<float>("walkSpeed"), out float speed) ? speed : 0;
-                blackboard.NavMeshAgent.speed = blackboard.CharData.walkSpeed;
-                // blackboard.Animator.SetTrigger("Run");
+                OnExit(blackboard);
+                onComplete?.Invoke();
+                return;
             }
             
             // Patrol 애니메이션 재생
@@ -102,9 +60,55 @@ namespace Monster.AI.Command
                 // _animationRunning = true;
                 blackboard.Animator.SetTrigger(Run);
             }
-            
-            // 명령어 완료 콜백 호출
-            onComplete?.Invoke();
+
+            blackboard.PatrolInfo.StartPatrolTime = Time.time;
+            blackboard.PatrolInfo.CurrentPatrolTime = blackboard.PatrolInfo.GetRandomPatrolTime();
+            blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
+            blackboard.NavMeshAgent.destination = blackboard.PatrolInfo.GetCurrentWayPoint();
+            blackboard.NavMeshAgent.isStopped = false; // 이동을 시작
+            blackboard.NavMeshAgent.speed = blackboard.CharData.walkSpeed;
+        }
+        
+        public override void Execute(Blackboard.Blackboard blackboard, Action onComplete)
+        {
+            if (!CheckBlackboard(blackboard))
+            {
+                // 블랙보드가 유효하지 않으면 즉시 종료
+                OnExit(blackboard);
+                onComplete?.Invoke();
+                return;
+            }
+    
+            // 1. 전체 순찰 시간이 종료되었는지 먼저 확인합니다.
+            if (Time.time - blackboard.PatrolInfo.StartPatrolTime >= blackboard.PatrolInfo.CurrentPatrolTime)
+            {
+                Debug.Log("Patrol time is over. Finishing PatrolCommand.");
+                OnExit(blackboard);
+                onComplete?.Invoke();
+                return;
+            }
+
+            // 2. 현재 목적지에 도달했는지 확인합니다.
+            if (blackboard.PatrolInfo.IsDestinationReached(blackboard.Agent.transform.position))
+            {
+                Debug.Log("Reached a waypoint. Setting next waypoint.");
+        
+                // ★★★ 핵심 수정 부분 ★★★
+                // OnExit()을 호출하는 대신, 다음 웨이포인트를 설정합니다.
+                blackboard.PatrolInfo.CurrentWayPointIndex = blackboard.PatrolInfo.GetNextWayPointIndex();
+                blackboard.NavMeshAgent.destination = blackboard.PatrolInfo.GetCurrentWayPoint();
+            }
+        }
+        
+        public override void OnExit(Blackboard.Blackboard blackboard)
+        {
+            // Patrol 상태 종료 처리
+            // blackboard.State = MonsterState.Idle;
+            // blackboard.Action.RemoveAction(EAction.Patrolling);
+            blackboard.NavMeshAgent.isStopped = true; // 이동을 멈춤
+            blackboard.NavMeshAgent.ResetPath(); // 경로를 초기화
+            // Debug.Log("PatrolCommand OnExit");
+            base.OnExit(blackboard);
         }
     }
 }

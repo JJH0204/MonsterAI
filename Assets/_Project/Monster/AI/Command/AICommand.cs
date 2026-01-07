@@ -6,7 +6,26 @@ namespace Monster.AI.Command
 {
     public abstract class AICommand
     {
-        public abstract IEnumerator Execute(Blackboard.Blackboard blackboard, Action onComplete);
+        public enum CommandState
+        {
+            Ready,
+            Executing,
+            Finished,
+        }
+        
+        public CommandState State = CommandState.Ready;
+        
+        public abstract void Execute(Blackboard.Blackboard blackboard, Action onComplete);
+
+        public virtual void OnEnter(Blackboard.Blackboard blackboard, Action onComplete = null)
+        {
+            State = CommandState.Executing;
+        }
+        public virtual void OnExit(Blackboard.Blackboard blackboard)
+        {
+            State = CommandState.Finished;
+        }
+        
         protected static bool CheckAnimator(Blackboard.Blackboard blackboard, string animationName)
         {
             if (blackboard?.Animator == null)
